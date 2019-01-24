@@ -12,7 +12,7 @@ public class DeviceManager implements SmartDeviceApi {
 
     @Override
     public Optional<Integer> addDevice(Device.Builder deviceBuilder) {
-        if (!deviceBuilder.isReadyToBeAdded()) {
+        if (!this.isReadyToBeAdded(deviceBuilder)) {
             return Optional.empty();
         }
         int id = this.latestId++;
@@ -59,5 +59,10 @@ public class DeviceManager implements SmartDeviceApi {
     @Override
     public Collection<Device> getAllDevices() {
         return Collections.unmodifiableCollection(this.allDevices.values());
+    }
+
+    @Override
+    public boolean isReadyToBeAdded(Device.Builder deviceBuilder) {
+        return (deviceBuilder.getName().isPresent() && deviceBuilder.isOn().isPresent());
     }
 }
