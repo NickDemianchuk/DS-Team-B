@@ -88,4 +88,23 @@ class DeviceManagerTest {
 
         assertEquals(builder.build(), deviceManager.getDeviceById(id).get());
     }
+
+    @Test
+    void isNotReadyToBeAdded() {
+        Device.Builder builder =
+                new Device.Builder()
+                        .setOn(true);
+
+        assertEquals(false, deviceManager.isReadyToBeAdded(builder));
+    }
+
+    @Test
+    void isReadyToBeAdded() {
+        Device.Builder builder =
+                new Device.Builder()
+                        .setName("ready to use bulb")
+                        .setOn(true);
+
+        assertEquals(true, deviceManager.isReadyToBeAdded(builder));
+    }
 }

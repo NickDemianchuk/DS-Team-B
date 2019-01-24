@@ -35,7 +35,7 @@ public class App {
             System.out.println("Could not remove device");
             return;
         }
-        System.out.format("Device with id %d removed successfuly\n", id);
+        System.out.format("Device with id %d removed successfully\n", id);
         reader.nextLine();
     }
 

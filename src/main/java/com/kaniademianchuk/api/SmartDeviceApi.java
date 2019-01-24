@@ -15,4 +15,6 @@ public interface SmartDeviceApi {
     Optional<Device> getDeviceById(int id);
 
     Collection<Device> getAllDevices();
+
+    boolean isReadyToBeAdded(Device.Builder deviceBuilder);
 }

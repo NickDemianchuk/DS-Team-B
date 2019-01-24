@@ -93,9 +93,5 @@ public class Device {
             }
             return new Device(this.id.get(), this.name.get(), this.isOn.get());
         }
-
-        public boolean isReadyToBeAdded() {
-            return (this.name.isPresent() && this.isOn.isPresent());
-        }
     }
 }
