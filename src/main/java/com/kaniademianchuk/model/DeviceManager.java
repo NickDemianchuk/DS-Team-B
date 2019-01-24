@@ -1,46 +1,40 @@
 package com.kaniademianchuk.model;
 
 
-import com.kaniademianchuk.api.SmartDeviceApi;
+import com.kaniademianchuk.api.ISmartDeviceApi;
 
 import java.util.*;
 
-public class DeviceManager implements SmartDeviceApi {
+public class DeviceManager implements ISmartDeviceApi {
 
-    private Map<Integer, Device> allDevices = new HashMap<Integer, Device>();
+    private Map<Integer, SmartDevice<Object>> allDevices = new HashMap<>();
     private int latestId = 0;
 
     @Override
-    public Optional<Integer> addDevice(Device.Builder deviceBuilder) {
-        if (!this.isReadyToBeAdded(deviceBuilder)) {
-            return Optional.empty();
-        }
+    public Optional<Integer> addDevice(SmartDevice<Object> object) {
         int id = this.latestId++;
-        deviceBuilder.setId(id);
-        this.allDevices.put(id, deviceBuilder.build());
+        object.setId(id);
+        this.allDevices.put(id, object);
         return Optional.of(id);
     }
 
     @Override
-    public boolean updateDevice(int id, Device.Builder deviceBuilder) {
-        Device prev = this.allDevices.get(id);
-        if (prev == null) {
+    public boolean updateDevice(SmartDevice<Object> object) {
+        Integer id = object.getId();
+        if (id == null) {
             return false;
         }
-        Device.Builder builder = new Device.Builder(deviceBuilder);
-        if (!builder.getName().isPresent()) {
-            builder.setName(prev.getName());
-        }
-        if (!builder.isOn().isPresent()) {
-            builder.setOn(prev.isOn());
-        }
-        builder.setId(prev.getId());
-        this.allDevices.put(id, builder.build());
+        this.allDevices.put(id, object);
         return true;
     }
 
     @Override
-    public boolean removeDevice(int id) {
+    public boolean removeDevice(SmartDevice<Object> device) {
+        return this.removeDevice(device.getId());
+    }
+
+    @Override
+    public boolean removeDevice(Integer id) {
         if (!this.allDevices.containsKey(id)) {
             return false;
         }
@@ -49,7 +43,7 @@ public class DeviceManager implements SmartDeviceApi {
     }
 
     @Override
-    public Optional<Device> getDeviceById(int id) {
+    public Optional<SmartDevice<Object>> getDeviceById(int id) {
         if (!this.allDevices.containsKey(id)) {
             return Optional.empty();
         }
@@ -57,12 +51,7 @@ public class DeviceManager implements SmartDeviceApi {
     }
 
     @Override
-    public Collection<Device> getAllDevices() {
+    public Collection<SmartDevice<Object>> getAllDevices() {
         return Collections.unmodifiableCollection(this.allDevices.values());
-    }
-
-    @Override
-    public boolean isReadyToBeAdded(Device.Builder deviceBuilder) {
-        return (deviceBuilder.getName().isPresent() && deviceBuilder.isOn().isPresent());
     }
 }

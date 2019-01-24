@@ -1,17 +1,14 @@
 package com.kaniademianchuk;
 
-import com.kaniademianchuk.api.SmartDeviceApi;
-import com.kaniademianchuk.model.Device;
+import com.kaniademianchuk.api.ISmartDeviceApi;
 import com.kaniademianchuk.model.DeviceManager;
+import com.kaniademianchuk.model.SmartDevice;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
-    static SmartDeviceApi deviceManager = new DeviceManager();
+    static ISmartDeviceApi deviceManager = new DeviceManager();
     static Map<String, Runnable> commands = new HashMap<>();
     static Scanner reader = new Scanner(System.in);
 
@@ -45,8 +42,8 @@ public class App {
         System.out.print("isOn: ");
         boolean isOn = reader.nextBoolean();
 
-        Device.Builder builder = new Device.Builder().setName(name).setOn(isOn);
-        Optional<Integer> id = deviceManager.addDevice(builder);
+        SmartDevice<Object> device = new SmartDevice<>(null, name, new ArrayList<>());
+        Optional<Integer> id = deviceManager.addDevice(device);
         if (!id.isPresent()) {
             System.out.println("Could not add device");
             return;
