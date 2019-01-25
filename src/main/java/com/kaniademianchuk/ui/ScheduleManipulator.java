@@ -26,7 +26,6 @@ public class ScheduleManipulator {
         });
     }
 
-
     public void run(String input) {
         while (!done) {
             System.out.print("Choose a command: toggle, on, off, exit: ");
@@ -41,6 +40,4 @@ public class ScheduleManipulator {
             }
         }
     }
-
-
 }

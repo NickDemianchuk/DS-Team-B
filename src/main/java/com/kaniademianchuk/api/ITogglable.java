@@ -2,8 +2,6 @@ package com.kaniademianchuk.api;
 
 public interface ITogglable extends IIdentifiable {
 
-    static int latestId = 0;
-
     void turnOn();
 
     void turnOff();

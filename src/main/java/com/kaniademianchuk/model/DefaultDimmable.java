@@ -6,7 +6,7 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
     private Integer dimmLevel;
 
-    protected DefaultDimmable(Integer id, String name, Integer dimmLevel) {
+    private DefaultDimmable(Integer id, String name, Integer dimmLevel) {
         super(id, name);
         if (!IDimmable.isValid(dimmLevel)) {
             throw new RuntimeException("Dimmlevel no bueno");
@@ -15,15 +15,15 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
     }
 
     public DefaultDimmable(String name, Integer dimmLevel) {
-        this(AbstractIdentifiable.latestId++, name, dimmLevel);
+        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, dimmLevel);
     }
 
     @Override
     public String toString() {
         return "DefaultDimmable{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", dimmLevel=" + dimmLevel +
+                "id=" + this.getId() +
+                ", name='" + this.getName() + '\'' +
+                ", dimmLevel=" + this.dimmLevel+
                 '}';
     }
 
@@ -46,17 +46,6 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
     @Override
     public boolean isOn() {
         return this.dimmLevel > MIN_DIMM_LEVEL;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
