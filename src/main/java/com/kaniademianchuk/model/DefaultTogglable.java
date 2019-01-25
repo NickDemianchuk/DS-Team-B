@@ -1,13 +1,12 @@
 package com.kaniademianchuk.model;
 
-import com.kaniademianchuk.api.IIdentifiable;
 import com.kaniademianchuk.api.ITogglable;
 
 import java.util.Objects;
 
 public class DefaultTogglable extends AbstractIdentifiable implements ITogglable {
 
-    private final boolean isOn;
+    private boolean isOn;
 
     protected DefaultTogglable(Integer id, String name, boolean isOn) {
         super(id, name);
@@ -33,13 +32,13 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
     }
 
     @Override
-    public DefaultTogglable turnOn() {
-        return new DefaultTogglable(this.id, this.name, true);
+    public void turnOn() {
+        this.isOn = true;
     }
 
     @Override
-    public DefaultTogglable turnOff() {
-        return new DefaultTogglable(this.id, this.name, false);
+    public void turnOff() {
+        this.isOn = false;
     }
 
     @Override
@@ -52,8 +51,8 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
     }
 
     @Override
-    public DefaultTogglable toggle() {
-        return new DefaultTogglable(this.id, this.name, !this.isOn);
+    public void toggle() {
+        this.isOn = !this.isOn;
     }
 
     @Override
@@ -63,12 +62,12 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
 
 
     @Override
-    public IIdentifiable setId(Integer id) {
-        return new DefaultTogglable(id, this.name, this.isOn);
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
-    public ITogglable setName(String name) {
-        return new DefaultTogglable(this.id, name, this.isOn);
+    public void setName(String name) {
+        this.name = name;
     }
 }

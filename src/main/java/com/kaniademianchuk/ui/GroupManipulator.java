@@ -1,8 +1,8 @@
 package com.kaniademianchuk.ui;
 
 import com.kaniademianchuk.api.ITogglable;
-import com.kaniademianchuk.model.DeviceGroup;
 import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.model.TogglableGroup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +14,12 @@ import java.util.regex.Pattern;
 public class GroupManipulator {
     private static final Pattern p = Pattern.compile("group (\\d+)");
     private final Scanner reader;
-    private final Manager<DeviceGroup<ITogglable>> groupManager;
+    private final Manager<TogglableGroup<ITogglable>> groupManager;
     private Map<String, Runnable> commands = new HashMap<>();
-    private DeviceGroup<ITogglable> group;
+    private TogglableGroup<ITogglable> group;
     private boolean done = false;
 
-    public GroupManipulator(Scanner reader, Manager<DeviceGroup<ITogglable>> groupManager) {
+    public GroupManipulator(Scanner reader, Manager<TogglableGroup<ITogglable>> groupManager) {
         this.reader = reader;
         this.groupManager = groupManager;
         commands.put("exit", () -> {
@@ -27,6 +27,10 @@ public class GroupManipulator {
         });
         commands.put("list", () -> {
             System.out.println(this.group.getDevices().toString());
+        });
+        commands.put("toggle", () -> {
+            this.group.toggle();
+            System.out.println("Done");
         });
     }
 
@@ -37,7 +41,7 @@ public class GroupManipulator {
             return;
         }
         Integer id = Integer.parseInt(m.group(1));
-        Optional<DeviceGroup<ITogglable>> optDevice = groupManager.getDeviceById(id);
+        Optional<TogglableGroup<ITogglable>> optDevice = groupManager.getDeviceById(id);
         if (!optDevice.isPresent()) {
             System.out.format("Device with id %d not found\n", id);
             return;
@@ -45,7 +49,7 @@ public class GroupManipulator {
         this.group = optDevice.get();
 
         while (!done) {
-            System.out.print("Choose a command: list, exit: ");
+            System.out.print("Choose a command: list, toggle, exit: ");
             String n = reader.nextLine();
             if (n.length() == 0) {
                 continue;

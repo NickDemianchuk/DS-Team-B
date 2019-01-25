@@ -4,12 +4,16 @@ public interface ITogglable extends IIdentifiable {
 
     static int latestId = 0;
 
-    ITogglable turnOn();
+    void turnOn();
 
-    ITogglable turnOff();
+    void turnOff();
 
-    ITogglable toggle();
+    void toggle();
 
+    /**
+     * @return Returns true if a device or all devices in a group are on
+     * false otherwise
+     */
     boolean isOn();
 
 }
