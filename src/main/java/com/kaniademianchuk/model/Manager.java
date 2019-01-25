@@ -10,7 +10,7 @@ public class Manager<T extends IIdentifiable> {
     private final Map<Integer, T> allDevices;
 
     public Manager() {
-        this.allDevices = new HashMap<>();
+        this(new HashMap<>());
     }
 
     public Manager(Map<Integer, T> map) {
@@ -36,11 +36,7 @@ public class Manager<T extends IIdentifiable> {
     }
 
     public boolean removeDevice(Integer id) {
-        if (!this.allDevices.containsKey(id)) {
-            return false;
-        }
-        this.allDevices.remove(id);
-        return true;
+        return (this.allDevices.remove(id) != null);
     }
 
     public Optional<T> getDeviceById(int id) {

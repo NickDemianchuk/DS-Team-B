@@ -2,11 +2,11 @@ package com.kaniademianchuk.api;
 
 public interface IDimmable extends ITogglable {
 
-    int MIN_DIMM_LEVEL = 0;
-    int MAX_DIMM_LEVEL = 100;
+    int MIN_DIM_LEVEL = 0;
+    int MAX_DIM_LEVEL = 100;
 
-    static boolean isValid(Integer dimmLevel) {
-        return !(dimmLevel < MIN_DIMM_LEVEL || dimmLevel > MAX_DIMM_LEVEL);
+    static boolean isValid(Integer dimLevel) {
+        return !(dimLevel < MIN_DIM_LEVEL || dimLevel > MAX_DIM_LEVEL);
     }
 
     /**
@@ -14,12 +14,12 @@ public interface IDimmable extends ITogglable {
      *
      * @return
      */
-    Integer getDimmLevel();
+    Integer getDimLevel();
 
     /**
      * 0-100
      *
-     * @param dimmLevel
+     * @param dimLevel
      */
-    void setDimmLevel(Integer dimmLevel);
+    void setDimLevel(Integer dimLevel);
 }

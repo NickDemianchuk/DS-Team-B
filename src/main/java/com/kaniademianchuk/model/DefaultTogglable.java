@@ -46,7 +46,7 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
         return "DefaultTogglable{" +
                 "id=" + this.getId() +
                 ", name='" + this.getName() + '\'' +
-                ", isOn=" + this.isOn +
+                ", isOn=" + this.isOn() +
                 '}';
     }
 

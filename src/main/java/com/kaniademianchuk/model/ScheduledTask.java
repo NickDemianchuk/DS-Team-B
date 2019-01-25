@@ -28,19 +28,24 @@ public class ScheduledTask extends TimerTask implements IIdentifiable {
         if (!device.isPresent()) {
             return;
         }
-        if (task.equals(ScheduledTaskType.TOGGLE)) {
-            device.get().toggle();
-        } else if (task.equals(ScheduledTaskType.TURN_ON)) {
-            device.get().turnOn();
-        } else if (task.equals(ScheduledTaskType.TURN_OFF)) {
-            device.get().turnOff();
-        } else {
-            System.err.format("Unknown task '%s' on device %d in taskId:%d\n", task, subjectId, id);
+        switch (this.task) {
+            case TOGGLE:
+                device.get().toggle();
+                break;
+            case TURN_ON:
+                device.get().turnOn();
+                break;
+            case TURN_OFF:
+                device.get().turnOff();
+                break;
+            default:
+                System.err.format("Unknown task '%s' on device %d in taskId:%d\n", task, subjectId, id);
+                break;
         }
     }
 
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Integer id) {
@@ -48,7 +53,7 @@ public class ScheduledTask extends TimerTask implements IIdentifiable {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {

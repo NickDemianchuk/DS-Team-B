@@ -24,23 +24,25 @@ public class TogglableGroup<T extends ITogglable> extends DeviceGroup<T> impleme
 
     @Override
     public void turnOn() {
-        this.getDevices().forEach((device) -> ((ITogglable) device).turnOn());
+        this.getDevices().forEach(device -> device.turnOn());
     }
 
     @Override
     public void turnOff() {
-        this.getDevices().forEach((device) -> ((ITogglable) device).turnOff());
+        this.getDevices().forEach(device -> device.turnOff());
     }
 
     @Override
     public void toggle() {
-        this.getDevices().forEach((device) -> ((ITogglable) device).toggle());
+        this.getDevices().forEach(device -> device.toggle());
     }
 
     @Override
     public boolean isOn() {
         for (ITogglable i : this.getDevices()) {
-            if (!i.isOn()) return false;
+            if (!i.isOn()) {
+                return false;
+            }
         }
         return true;
     }

@@ -4,18 +4,18 @@ import com.kaniademianchuk.api.IDimmable;
 
 public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
-    private Integer dimmLevel;
+    private Integer dimLevel;
 
-    private DefaultDimmable(Integer id, String name, Integer dimmLevel) {
+    private DefaultDimmable(Integer id, String name, Integer dimLevel) {
         super(id, name);
-        if (!IDimmable.isValid(dimmLevel)) {
-            throw new RuntimeException("Dimmlevel no bueno");
+        if (!IDimmable.isValid(dimLevel)) {
+            throw new RuntimeException("Invalid dim level");
         }
-        this.dimmLevel = dimmLevel;
+        this.dimLevel = dimLevel;
     }
 
-    public DefaultDimmable(String name, Integer dimmLevel) {
-        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, dimmLevel);
+    public DefaultDimmable(String name, Integer dimLevel) {
+        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, dimLevel);
     }
 
     @Override
@@ -23,38 +23,37 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
         return "DefaultDimmable{" +
                 "id=" + this.getId() +
                 ", name='" + this.getName() + '\'' +
-                ", dimmLevel=" + this.dimmLevel+
+                ", dimLevel=" + this.getDimLevel() +
                 '}';
     }
 
     @Override
     public void turnOn() {
-        this.dimmLevel = MAX_DIMM_LEVEL;
+        this.dimLevel = MAX_DIM_LEVEL;
     }
 
     @Override
     public void turnOff() {
-        this.dimmLevel = MIN_DIMM_LEVEL;
+        this.dimLevel = MIN_DIM_LEVEL;
     }
-
 
     @Override
     public void toggle() {
-        this.dimmLevel = this.isOn() ? MIN_DIMM_LEVEL : MAX_DIMM_LEVEL;
+        this.dimLevel = this.isOn() ? MIN_DIM_LEVEL : MAX_DIM_LEVEL;
     }
 
     @Override
     public boolean isOn() {
-        return this.dimmLevel > MIN_DIMM_LEVEL;
+        return this.dimLevel > MIN_DIM_LEVEL;
     }
 
     @Override
-    public Integer getDimmLevel() {
-        return this.dimmLevel;
+    public Integer getDimLevel() {
+        return this.dimLevel;
     }
 
     @Override
-    public void setDimmLevel(Integer dimmLevel) {
-        this.dimmLevel = dimmLevel;
+    public void setDimLevel(Integer dimLevel) {
+        this.dimLevel = dimLevel;
     }
 }
