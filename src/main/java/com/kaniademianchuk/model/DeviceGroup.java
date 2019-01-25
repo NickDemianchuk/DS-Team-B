@@ -21,14 +21,16 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
 
     public DeviceGroup(String name, T... devices) {
         super(AbstractIdentifiable.receiveAndIncrementLatestId(), name);
-        for (T device : devices)
+        for (T device : devices) {
             this.devices.put(device.getId(), device);
+        }
     }
 
     protected DeviceGroup(Integer id, String name, T... devices) {
         super(id, name);
-        for (T device : devices)
+        for (T device : devices) {
             this.devices.put(device.getId(), device);
+        }
     }
 
     public Collection<T> getDevices() {
@@ -56,7 +58,7 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
         StringBuffer buffer = new StringBuffer();
         buffer.append("DeviceGroup{id='" + this.getId() +
                 "', name='" + this.getName() +
-                "', size=" + this.devices.size());
+                "', size=" + this.getDevices().size());
         buffer.append("}");
         return buffer.toString();
     }

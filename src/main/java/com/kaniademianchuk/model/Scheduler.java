@@ -1,7 +1,5 @@
 package com.kaniademianchuk.model;
 
-import com.kaniademianchuk.api.ITogglable;
-
 import java.util.Date;
 import java.util.Optional;
 import java.util.Timer;
