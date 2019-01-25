@@ -1,12 +1,10 @@
 package com.kaniademianchuk.model;
 
 import com.kaniademianchuk.api.IDimmable;
-import com.kaniademianchuk.api.IIdentifiable;
-import com.kaniademianchuk.api.ITogglable;
 
 public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
-    private final Integer dimmLevel;
+    private Integer dimmLevel;
 
     protected DefaultDimmable(Integer id, String name, Integer dimmLevel) {
         super(id, name);
@@ -30,19 +28,19 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
     }
 
     @Override
-    public IDimmable turnOn() {
-        return new DefaultDimmable(this.id, this.name, MAX_DIMM_LEVEL);
+    public void turnOn() {
+        this.dimmLevel = MAX_DIMM_LEVEL;
     }
 
     @Override
-    public IDimmable turnOff() {
-        return new DefaultDimmable(this.id, this.name, MIN_DIMM_LEVEL);
+    public void turnOff() {
+        this.dimmLevel = MIN_DIMM_LEVEL;
     }
 
 
     @Override
-    public IDimmable toggle() {
-        return new DefaultDimmable(this.id, this.name, this.isOn() ? MIN_DIMM_LEVEL : MAX_DIMM_LEVEL);
+    public void toggle() {
+        this.dimmLevel = this.isOn() ? MIN_DIMM_LEVEL : MAX_DIMM_LEVEL;
     }
 
     @Override
@@ -51,14 +49,14 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
     }
 
     @Override
-    public IIdentifiable setId(Integer id) {
-        return new DefaultDimmable(id, this.name, this.dimmLevel);
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 
     @Override
-    public ITogglable setName(String name) {
-        return new DefaultDimmable(this.id, name, this.dimmLevel);
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -67,7 +65,7 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
     }
 
     @Override
-    public IDimmable setDimmLevel(Integer dimmLevel) {
-        return new DefaultDimmable(this.id, this.name, dimmLevel);
+    public void setDimmLevel(Integer dimmLevel) {
+        this.dimmLevel = dimmLevel;
     }
 }

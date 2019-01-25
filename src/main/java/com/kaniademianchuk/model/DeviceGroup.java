@@ -65,12 +65,12 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
     }
 
     @Override
-    public DeviceGroup<T> setId(Integer id) {
-        return new DeviceGroup<>(id, this.name, this.devices);
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
-    public IIdentifiable setName(String name) {
-        return new DeviceGroup<>(this.id, name, this.devices);
+    public void setName(String name) {
+        this.name = name;
     }
 }

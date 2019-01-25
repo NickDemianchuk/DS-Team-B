@@ -25,18 +25,15 @@ public class DeviceManipulator {
             DeviceManipulator.this.done = true;
         });
         commands.put("toggle", () -> {
-            this.device = this.device.toggle();
-            this.deviceManager.updateDevice(this.device);
+            this.device.toggle();
             System.out.println(this.device.toString());
         });
         commands.put("on", () -> {
-            this.device = this.device.turnOn();
-            this.deviceManager.updateDevice(this.device);
+            this.device.turnOn();
             System.out.println(this.device.toString());
         });
         commands.put("off", () -> {
-            this.device = this.device.turnOff();
-            this.deviceManager.updateDevice(this.device);
+            this.device.turnOff();
             System.out.println(this.device.toString());
         });
     }

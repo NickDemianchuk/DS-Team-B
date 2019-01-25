@@ -21,5 +21,5 @@ public interface IDimmable extends ITogglable {
      *
      * @param dimmLevel
      */
-    IDimmable setDimmLevel(Integer dimmLevel);
+    void setDimmLevel(Integer dimmLevel);
 }

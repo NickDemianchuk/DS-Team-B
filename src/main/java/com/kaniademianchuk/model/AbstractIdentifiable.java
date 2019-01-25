@@ -8,8 +8,8 @@ import java.util.Objects;
 abstract class AbstractIdentifiable implements IIdentifiable {
 
     protected static int latestId = 0;
-    protected final Integer id;
-    protected final String name;
+    protected Integer id;
+    protected String name;
 
     protected AbstractIdentifiable(Integer id, String name) {
         this.id = id;
