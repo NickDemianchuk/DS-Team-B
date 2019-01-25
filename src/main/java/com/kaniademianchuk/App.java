@@ -1,69 +1,70 @@
 package com.kaniademianchuk;
 
-import com.kaniademianchuk.api.ISmartDeviceApi;
-import com.kaniademianchuk.model.DeviceManager;
-import com.kaniademianchuk.model.SmartDevice;
+import com.kaniademianchuk.api.ITogglable;
+import com.kaniademianchuk.model.DefaultTogglable;
+import com.kaniademianchuk.model.DeviceGroup;
+import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.ui.DeviceManipulator;
+import com.kaniademianchuk.ui.GroupManipulator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class App {
 
-    static ISmartDeviceApi deviceManager = new DeviceManager();
-    static Map<String, Runnable> commands = new HashMap<>();
+
+    static Manager<DeviceGroup<ITogglable>> groupManager = new Manager<DeviceGroup<ITogglable>>();
+    static Manager<ITogglable> deviceManager = new Manager<ITogglable>();
+    static Map<String, Command> commands = new HashMap<>();
     static Scanner reader = new Scanner(System.in);
 
     static {
-        commands.put("list", App::listDevices);
-        commands.put("add", App::addDevice);
-        commands.put("remove", App::removeDevice);
-        commands.put("exit", () -> System.exit(0));
+        commands.put("exit", (str) -> System.exit(0));
+        commands.put("listGroups", (str) -> App.listManager(groupManager));
+        commands.put("listDevices", (str) -> App.listManager(deviceManager));
+        commands.put("item (\\d+)", (str) -> new DeviceManipulator(App.reader, deviceManager).run(str));
+        commands.put("group (\\d+)", (str) -> new GroupManipulator(App.reader, groupManager).run(str));
     }
 
-    public static void listDevices() {
-        System.out.println(deviceManager.getAllDevices().toString());
+    public static void listManager(Manager manager) {
+        System.out.println(manager.getAllDevices().toString());
     }
 
-    public static void removeDevice() {
-        System.out.print("Id: ");
-        int id = reader.nextInt();
-        boolean success = deviceManager.removeDevice(id);
+    public static void initialize() {
+        DefaultTogglable device1 = new DefaultTogglable("Outlet1", false);
+        DefaultTogglable device2 = new DefaultTogglable("Outlet2", false);
+        DefaultTogglable device3 = new DefaultTogglable("Outlet3", false);
 
-        if (!success) {
-            System.out.println("Could not remove device");
-            return;
-        }
-        System.out.format("Device with id %d removed successfully\n", id);
-        reader.nextLine();
-    }
+        App.groupManager.addDevice(new DeviceGroup<ITogglable>("PowerSwitch1",
+                device1,
+                device2,
+                device3
+        ));
 
-    public static void addDevice() {
-        System.out.print("Name: ");
-        String name = reader.nextLine();
-        System.out.print("isOn: ");
-        boolean isOn = reader.nextBoolean();
+        App.deviceManager.addDevice(device1);
+        App.deviceManager.addDevice(device2);
+        App.deviceManager.addDevice(device3);
 
-        SmartDevice<Object> device = new SmartDevice<>(null, name, new ArrayList<>());
-        Optional<Integer> id = deviceManager.addDevice(device);
-        if (!id.isPresent()) {
-            System.out.println("Could not add device");
-            return;
-        }
-        System.out.format("Added device successfully, id %d\n", id.get());
-        reader.nextLine();
     }
 
     public static void main(String[] args) {
-        System.out.println("Choose a command: list, add, update, remove, exit");
+        App.initialize();
         while (true) {
+            System.out.print("Choose a command: listGroups, listDevices, item <id>, group <id>, exit: ");
             String n = reader.nextLine();
             if (n.length() == 0) {
                 continue;
             }
-            if (commands.containsKey(n)) {
-                commands.get(n).run();
-            } else {
-                System.out.println("Invalid command");
+            for (Map.Entry<String, Command> entry : commands.entrySet()) {
+                if (n.matches(entry.getKey())) {
+                    entry.getValue().run(n);
+                }
             }
         }
+    }
+
+    interface Command {
+        void run(String command);
     }
 }

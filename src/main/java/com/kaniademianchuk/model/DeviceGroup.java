@@ -1,28 +1,50 @@
 package com.kaniademianchuk.model;
 
-import java.util.*;
+import com.kaniademianchuk.api.IIdentifiable;
 
-public class DeviceGroup {
-    private final Map<Integer, Device> devices = new HashMap<>();
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-    public DeviceGroup() {
+public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable implements IIdentifiable {
+    private final Map<Integer, T> devices = new HashMap<>();
+
+    protected DeviceGroup(Integer id, String name, Map<Integer, T> map) {
+        super(id, name);
+        this.devices.putAll(map);
     }
 
-    public DeviceGroup(Device... devices) {
-        this();
-        for (Device device : devices)
+    public DeviceGroup(String name, Map<Integer, T> map) {
+        super(AbstractIdentifiable.latestId++, name);
+        this.devices.putAll(map);
+    }
+
+    public DeviceGroup(String name, T... devices) {
+        super(AbstractIdentifiable.latestId++, name);
+        for (T device : devices)
             this.devices.put(device.getId(), device);
     }
 
-    public Device addDevice(Device device) {
+    protected DeviceGroup(Integer id, String name, T... devices) {
+        super(id, name);
+        for (T device : devices)
+            this.devices.put(device.getId(), device);
+    }
+
+    public Collection<T> getDevices() {
+        return this.devices.values();
+    }
+
+
+    public T addDevice(T device) {
         return this.devices.put(device.getId(), device);
     }
 
-    public Device removeDevice(Device device) {
+    public T removeDevice(T device) {
         return this.devices.remove(device.getId());
     }
 
-    public Device getDeviceById(int id) {
+    public T getDeviceById(int id) {
         return this.devices.get(id);
     }
 
@@ -33,10 +55,22 @@ public class DeviceGroup {
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        for (Device device : this.devices.values()) {
-            buffer.append(device.toString());
-            buffer.append(System.lineSeparator());
-        }
+        buffer.append("DeviceGroup{id='" + id + "', name='" + name + "', size=" + this.devices.size());
+//        for (T device : this.devices.values()) {
+//            buffer.append(device.toString());
+//            buffer.append(System.lineSeparator());
+//        }
+        buffer.append("}");
         return buffer.toString();
+    }
+
+    @Override
+    public DeviceGroup<T> setId(Integer id) {
+        return new DeviceGroup<>(id, this.name, this.devices);
+    }
+
+    @Override
+    public IIdentifiable setName(String name) {
+        return new DeviceGroup<>(this.id, name, this.devices);
     }
 }
