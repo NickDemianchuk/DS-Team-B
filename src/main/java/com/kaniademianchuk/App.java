@@ -25,7 +25,7 @@ public class App {
         commands.put("listDevices", (str) -> App.listManager(deviceManager));
         commands.put("item (\\d+)", (str) -> new DeviceManipulator(App.reader, deviceManager).run(str));
         commands.put("group (\\d+)", (str) -> new GroupManipulator(App.reader, groupManager).run(str));
-        commands.put("schedule", (str) -> new ScheduleManipulator(App.reader, taskManager).run(str));
+        commands.put("schedule", (str) -> new ScheduleManipulator(App.reader, taskManager, deviceManager).run(str));
     }
 
     public static void listManager(Manager manager) {
@@ -52,7 +52,7 @@ public class App {
     public static void main(String[] args) {
         App.initialize();
         while (true) {
-            System.out.print("Choose a command: listGroups, listDevices, item <id>, group <id>, exit: ");
+            System.out.print("Choose a command: listGroups, listDevices, item <id>, group <id>, schedule, exit: ");
             String n = reader.nextLine();
             if (n.length() == 0) {
                 continue;

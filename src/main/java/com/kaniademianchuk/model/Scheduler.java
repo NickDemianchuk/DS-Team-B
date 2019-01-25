@@ -1,6 +1,9 @@
 package com.kaniademianchuk.model;
 
+import com.kaniademianchuk.api.ITogglable;
+
 import java.util.Date;
+import java.util.Optional;
 import java.util.Timer;
 
 public class Scheduler {
@@ -10,14 +13,12 @@ public class Scheduler {
     public Scheduler() {
     }
 
-    public ScheduledTask scheduleTask(Date date, Integer interval, final Runnable task) {
-        ScheduledTask scheduledTask = new ScheduledTask() {
-            @Override
-            public void run() {
-                task.run();
-            }
-        };
-        timer.schedule(scheduledTask, date, interval);
-        return scheduledTask;
+    public ScheduledTask scheduleTask(Date date, Optional<Integer> interval, final ScheduledTask task) {
+        if (interval.isPresent()) {
+            timer.schedule(task, date, interval.get());
+        } else {
+            timer.schedule(task, date);
+        }
+        return task;
     }
 }
