@@ -15,12 +15,12 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
     }
 
     public DeviceGroup(String name, Map<Integer, T> map) {
-        super(AbstractIdentifiable.latestId++, name);
+        super(AbstractIdentifiable.receiveAndIncrementLatestId(), name);
         this.devices.putAll(map);
     }
 
     public DeviceGroup(String name, T... devices) {
-        super(AbstractIdentifiable.latestId++, name);
+        super(AbstractIdentifiable.receiveAndIncrementLatestId(), name);
         for (T device : devices)
             this.devices.put(device.getId(), device);
     }
@@ -34,7 +34,6 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
     public Collection<T> getDevices() {
         return this.devices.values();
     }
-
 
     public T addDevice(T device) {
         return this.devices.put(device.getId(), device);
@@ -55,22 +54,10 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("DeviceGroup{id='" + id + "', name='" + name + "', size=" + this.devices.size());
-//        for (T device : this.devices.values()) {
-//            buffer.append(device.toString());
-//            buffer.append(System.lineSeparator());
-//        }
+        buffer.append("DeviceGroup{id='" + this.getId() +
+                "', name='" + this.getName() +
+                "', size=" + this.devices.size());
         buffer.append("}");
         return buffer.toString();
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 }

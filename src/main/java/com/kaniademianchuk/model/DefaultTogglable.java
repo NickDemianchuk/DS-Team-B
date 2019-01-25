@@ -8,13 +8,13 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
 
     private boolean isOn;
 
-    protected DefaultTogglable(Integer id, String name, boolean isOn) {
+    private DefaultTogglable(Integer id, String name, boolean isOn) {
         super(id, name);
         this.isOn = isOn;
     }
 
     public DefaultTogglable(String name, boolean isOn) {
-        this(AbstractIdentifiable.latestId++, name, isOn);
+        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, isOn);
     }
 
     @Override
@@ -44,9 +44,9 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
     @Override
     public String toString() {
         return "DefaultTogglable{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isOn=" + isOn +
+                "id=" + this.getId() +
+                ", name='" + this.getName() + '\'' +
+                ", isOn=" + this.isOn +
                 '}';
     }
 
@@ -58,16 +58,5 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
     @Override
     public boolean isOn() {
         return this.isOn;
-    }
-
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 }

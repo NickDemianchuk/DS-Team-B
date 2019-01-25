@@ -7,9 +7,9 @@ import java.util.Objects;
 
 abstract class AbstractIdentifiable implements IIdentifiable {
 
-    protected static int latestId = 0;
-    protected Integer id;
-    protected String name;
+    private static int latestId = 0;
+    private Integer id;
+    private String name;
 
     protected AbstractIdentifiable(Integer id, String name) {
         this.id = id;
@@ -38,5 +38,19 @@ abstract class AbstractIdentifiable implements IIdentifiable {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static int receiveAndIncrementLatestId() {
+        return latestId++;
     }
 }
