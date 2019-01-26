@@ -23,7 +23,7 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         DefaultTogglable that = (DefaultTogglable) o;
-        return isOn == that.isOn;
+        return this.isOn == that.isOn;
     }
 
     @Override
