@@ -10,11 +10,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ScheduleManipulator {
+public class ScheduleManipulator extends AbstractManipulator {
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static int DAILY = 1000 * 60 * 60 * 24;
     private static int WEEKLY = DAILY * 7;
-    private final Scanner reader;
     private final Manager<ScheduledTask> taskManager;
     private final Manager<ITogglable> deviceManager;
     private final Scheduler scheduler;
@@ -22,7 +21,7 @@ public class ScheduleManipulator {
     private boolean done = false;
 
     public ScheduleManipulator(Scanner reader, Manager<ScheduledTask> taskManager, Manager<ITogglable> deviceManager) {
-        this.reader = reader;
+        super(reader);
         this.taskManager = taskManager;
         this.deviceManager = deviceManager;
         this.scheduler = new Scheduler();
@@ -32,7 +31,7 @@ public class ScheduleManipulator {
         commands.put("exit", () -> {
             ScheduleManipulator.this.done = true;
         });
-        commands.put("add", this::addTask);
+        commands.put("create", this::addTask);
         commands.put("remove", this::removeTask);
     }
 
@@ -51,12 +50,10 @@ public class ScheduleManipulator {
     }
 
     private void addTask() {
-        System.out.print("Name: ");
-        String name = this.reader.nextLine();
+        String name = this.promptString("Name: ");
         Date initialDate;
         while (true) {
-            System.out.print("Time (eg. 2009-12-31 23:59:59): ");
-            String dateString = this.reader.nextLine();
+            String dateString = this.promptString("Time (eg. 2009-12-31 23:59:59): ");
             try {
                 initialDate = ScheduleManipulator.format.parse(dateString);
                 break;
@@ -85,8 +82,7 @@ public class ScheduleManipulator {
         String task;
         ScheduledTaskType actualTask = null;
         while (actualTask == null) {
-            System.out.print("Task (toggle/turnOn/turnOff): ");
-            task = this.reader.nextLine();
+            task = promptOneFromMany("Task (toggle|turnOn|turnOff): ", "toggle", "turnOn", "turnOff");
             switch (task) {
                 case "toggle":
                     actualTask = ScheduledTaskType.TOGGLE;
@@ -107,11 +103,7 @@ public class ScheduleManipulator {
 
     public void run(String input) {
         while (!done) {
-            System.out.print("Choose a command: list, add, remove, exit: ");
-            String n = reader.nextLine();
-            if (n.length() == 0) {
-                continue;
-            }
+            String n = this.promptString("Choose a command: list, create, remove, exit: ");
             for (Map.Entry<String, Runnable> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
                     entry.getValue().run();

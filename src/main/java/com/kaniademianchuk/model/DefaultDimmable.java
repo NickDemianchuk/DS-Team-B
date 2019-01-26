@@ -8,10 +8,7 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
     private DefaultDimmable(Integer id, String name, Integer dimLevel) {
         super(id, name);
-        if (!IDimmable.isValid(dimLevel)) {
-            throw new RuntimeException("Invalid dim level");
-        }
-        this.dimLevel = dimLevel;
+        this.setDimLevel(dimLevel);
     }
 
     public DefaultDimmable(String name, Integer dimLevel) {
@@ -54,6 +51,9 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
     @Override
     public void setDimLevel(Integer dimLevel) {
+        if (!IDimmable.isValid(dimLevel)) {
+            throw new RuntimeException("Invalid dim level");
+        }
         this.dimLevel = dimLevel;
     }
 }
