@@ -22,15 +22,6 @@ public class Manager<T extends IIdentifiable> {
         return Optional.of(device);
     }
 
-    public boolean updateDevice(T object) {
-        Integer id = object.getId();
-        if (id == null) {
-            return false;
-        }
-        this.allDevices.put(id, object);
-        return true;
-    }
-
     public boolean removeDevice(T device) {
         return this.removeDevice(device.getId());
     }
