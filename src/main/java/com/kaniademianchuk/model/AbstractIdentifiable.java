@@ -50,7 +50,7 @@ abstract class AbstractIdentifiable implements IIdentifiable {
         this.name = name;
     }
 
-    public static int receiveAndIncrementLatestId() {
+    protected static int receiveAndIncrementLatestId() {
         return latestId++;
     }
 }
