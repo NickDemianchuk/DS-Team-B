@@ -12,30 +12,68 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GroupManipulator extends AbstractManipulator {
-    private static final Pattern p = Pattern.compile("group (\\d+)");
+    private static final Pattern groupPattern = Pattern.compile("group (\\d+)");
+    private static final Pattern addDevicePattern = Pattern.compile("addDevice (\\d+)");
+    private static final Pattern removeDevicePattern = Pattern.compile("removeDevice (\\d+)");
     private final Manager<TogglableGroup<ITogglable>> groupManager;
+    private final Manager<ITogglable> deviceManager;
     private Map<String, Command> commands = new HashMap<>();
     private TogglableGroup<ITogglable> group;
     private boolean done = false;
 
-    public GroupManipulator(Scanner reader, Manager<TogglableGroup<ITogglable>> groupManager) {
+    public GroupManipulator(Scanner reader, Manager<TogglableGroup<ITogglable>> groupManager, Manager<ITogglable> deviceManager) {
         super(reader);
         this.groupManager = groupManager;
+        this.deviceManager = deviceManager;
         commands.put("exit", str -> {
             GroupManipulator.this.done = true;
         });
         commands.put("list", str -> {
-            System.out.println(this.group.getDevices().toString());
+            printDevicesInGroup();
         });
         commands.put("toggle", str -> {
             this.group.toggle();
-            System.out.println(this.group.getDevices().toString());
+            printDevicesInGroup();
         });
+        commands.put("addDevice (\\d+)", str -> {
+            Optional<Integer> match = matchFirstInteger(addDevicePattern, str);
+            if (!match.isPresent()) {
+                return;
+            }
+            Integer id = match.get();
+            Optional<ITogglable> device = GroupManipulator.this.deviceManager.getDeviceById(id);
+            if (!device.isPresent()) {
+                System.out.format("Device with id %d not found\n", id);
+                return;
+            }
+            if (GroupManipulator.this.group.getDeviceById(id) != null) {
+                System.err.format("Group contains device with id %d already\n", id);
+                return;
+            }
+            GroupManipulator.this.group.addDevice(device.get());
+            printDevicesInGroup();
+        });
+        commands.put("removeDevice (\\d+)", str -> {
+            Optional<Integer> match = matchFirstInteger(removeDevicePattern, str);
+            if (!match.isPresent()) {
+                return;
+            }
+            Integer id = match.get();
+            boolean success = GroupManipulator.this.group.removeDevice(id);
+            if (!success) {
+                System.err.format("Device with id %d not found in group\n", id);
+            }
+            printDevicesInGroup();
+        });
+    }
+
+    private void printDevicesInGroup() {
+        System.out.println(this.group.getDevices().toString());
     }
 
 
     public void run(String input) {
-        Matcher m = p.matcher(input);
+        Matcher m = groupPattern.matcher(input);
         if (!m.find()) {
             return;
         }
@@ -48,7 +86,7 @@ public class GroupManipulator extends AbstractManipulator {
         this.group = optDevice.get();
 
         while (!done) {
-            System.out.print("Choose a command: list, toggle, exit: ");
+            System.out.print("Choose a command: addDevice <id>, removeDevice <id>, list, toggle, exit: ");
             String n = reader.nextLine();
             if (n.length() == 0) {
                 continue;

@@ -25,36 +25,44 @@ public class DeviceManipulator extends AbstractManipulator {
         commands.put("exit", str -> {
             DeviceManipulator.this.done = true;
         });
+        commands.put("status", str -> {
+            printDevice();
+        });
         commands.put("toggle", str -> {
             this.device.toggle();
-            System.out.println(this.device.toString());
+            printDevice();
         });
         commands.put("on", str -> {
             this.device.turnOn();
-            System.out.println(this.device.toString());
+            printDevice();
         });
         commands.put("off", str -> {
             this.device.turnOff();
-            System.out.println(this.device.toString());
+            printDevice();
         });
 
         commands.put("dim (\\d+)", (str) -> {
             if (!(this.device instanceof IDimmable)) {
                 return;
             }
-            Matcher m = dimPattern.matcher(str);
-            if (!m.find()) {
-                System.err.format("Invalid command\n");
+            Optional<Integer> dimValue = matchFirstInteger(dimPattern, str);
+            if (!dimValue.isPresent()) {
+                System.out.format("Invalid value\n");
+                return;
             }
-            Integer value = Integer.parseInt(m.group(1));
+            Integer value = dimValue.get();
             try {
                 ((IDimmable) this.device).setDimLevel(value);
-                System.out.println(this.device.toString());
+                printDevice();
             } catch (Exception e) {
                 System.err.format("Could not set dimLevel %d, %s\n", value, e.toString());
             }
         });
 
+    }
+
+    private void printDevice() {
+        System.out.println(this.device.toString());
     }
 
     public void run(String input) {
@@ -75,7 +83,7 @@ public class DeviceManipulator extends AbstractManipulator {
             if (this.device instanceof IDimmable) {
                 System.out.print("dim <0-100>, ");
             }
-            System.out.print("toggle, on, off, exit: ");
+            System.out.print("status, toggle, on, off, exit: ");
             String lineInput = reader.nextLine();
             if (lineInput.length() == 0) {
                 continue;

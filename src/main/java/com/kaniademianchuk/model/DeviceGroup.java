@@ -41,8 +41,12 @@ public class DeviceGroup<T extends IIdentifiable> extends AbstractIdentifiable i
         return this.devices.put(device.getId(), device);
     }
 
-    public T removeDevice(T device) {
-        return this.devices.remove(device.getId());
+    public boolean removeDevice(T device) {
+        return this.removeDevice(device.getId());
+    }
+
+    public boolean removeDevice(Integer id) {
+        return this.devices.remove(id) != null;
     }
 
     public T getDeviceById(int id) {

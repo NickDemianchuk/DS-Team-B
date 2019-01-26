@@ -59,20 +59,20 @@ class DeviceGroupTest {
         IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 100);
 
         int sizeBeforeRemoving = deviceGroup.getSize();
-        IIdentifiable expectedResponse = deviceGroup.removeDevice(newDimmable);
+        boolean expectedResponse = deviceGroup.removeDevice(newDimmable);
         int sizeAfterRemoving = deviceGroup.getSize();
 
-        assertNull(expectedResponse);
+        assertFalse(expectedResponse);
         assertEquals(sizeBeforeRemoving, sizeAfterRemoving);
     }
 
     @Test
     void removeExistingDevice() {
         int sizeBeforeRemoving = deviceGroup.getSize();
-        IIdentifiable expectedResponse = deviceGroup.removeDevice(dimmable);
+        boolean expectedResponse = deviceGroup.removeDevice(dimmable);
         int sizeAfterRemoving = deviceGroup.getSize();
 
-        assertNotNull(expectedResponse);
+        assertTrue(expectedResponse);
         assertEquals(expectedResponse, dimmable);
         assertNotEquals(sizeBeforeRemoving, sizeAfterRemoving);
         assertEquals(sizeBeforeRemoving - 1, sizeAfterRemoving);

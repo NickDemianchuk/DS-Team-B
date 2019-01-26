@@ -1,6 +1,9 @@
 package com.kaniademianchuk.ui;
 
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractManipulator {
 
@@ -20,7 +23,6 @@ public abstract class AbstractManipulator {
         }
     }
 
-
     protected String promptOneFromMany(String prompt, String... choices) {
         while (true) {
             System.out.print(prompt);
@@ -31,6 +33,15 @@ public abstract class AbstractManipulator {
                 }
             }
         }
+    }
+
+    protected Optional<Integer> matchFirstInteger(Pattern pattern, String input) {
+        Matcher m = pattern.matcher(input);
+        if (!m.find()) {
+            return Optional.empty();
+        }
+        Integer id = Integer.parseInt(m.group(1));
+        return Optional.of(id);
     }
 
     interface Command {

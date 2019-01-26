@@ -95,7 +95,7 @@ public class ScheduleManipulator extends AbstractManipulator {
                     break;
             }
         }
-        ScheduledTask scheduledTask = new ScheduledTask(this.deviceManager, id, actualTask);
+        ScheduledTask scheduledTask = new ScheduledTask(name, this.deviceManager, id, actualTask);
         this.scheduler.scheduleTask(initialDate, interval, scheduledTask);
         this.taskManager.addDevice(scheduledTask);
         System.out.format("Created task with id %d\n", scheduledTask.getId());

@@ -6,9 +6,13 @@ import com.kaniademianchuk.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class MainMenu extends AbstractManipulator {
+    private static final Pattern removeDevicePattern = Pattern.compile("removeDevice (\\d+)");
+    private static final Pattern removeGroupPattern = Pattern.compile("removeGroup (\\d+)");
     private Manager<TogglableGroup<ITogglable>> groupManager = new Manager<TogglableGroup<ITogglable>>();
     private Manager<ITogglable> deviceManager = new Manager<ITogglable>();
     private Manager<ScheduledTask> taskManager = new Manager<ScheduledTask>();
@@ -21,17 +25,46 @@ public class MainMenu extends AbstractManipulator {
         commands.put("listGroups", str -> this.listManager(groupManager));
         commands.put("listDevices", str -> this.listManager(deviceManager));
         commands.put("device (\\d+)", str -> new DeviceManipulator(this.reader, deviceManager).run(str));
-        commands.put("group (\\d+)", str -> new GroupManipulator(this.reader, groupManager).run(str));
+        commands.put("group (\\d+)", str -> new GroupManipulator(this.reader, groupManager, deviceManager).run(str));
         commands.put("schedule", str -> new ScheduleManipulator(this.reader, taskManager, deviceManager).run(str));
         commands.put("createDevice", str -> {
             ITogglable device = this.addDeviceDialog();
             this.deviceManager.addDevice(device);
             System.out.format("Added device with id %d\n", device.getId());
         });
+        commands.put("removeDevice (\\d+)", str -> {
+            Optional<Integer> match = matchFirstInteger(removeDevicePattern, str);
+            if (!match.isPresent()) {
+                return;
+            }
+            Integer id = match.get();
+            boolean success = MainMenu.this.deviceManager.removeDevice(id);
+            if (!success) {
+                System.err.format("Device with id %d not found\n", id);
+                return;
+            }
+            for (TogglableGroup<ITogglable> group : MainMenu.this.groupManager.getAllDevices()) {
+                group.removeDevice(id);
+            }
+            System.out.format("Device with id %d deleted\n", id);
+        });
         commands.put("createGroup", str -> {
             TogglableGroup<ITogglable> newGroup = this.addGroupDialog();
             this.groupManager.addDevice(newGroup);
             System.out.format("Added group with id %d\n", newGroup.getId());
+        });
+        commands.put("removeGroup (\\d+)", str -> {
+            Optional<Integer> match = matchFirstInteger(removeGroupPattern, str);
+            if (!match.isPresent()) {
+                return;
+            }
+            Integer id = match.get();
+            boolean success = MainMenu.this.groupManager.removeDevice(id);
+            if (!success) {
+                System.err.format("Group with id %d not found\n", id);
+                return;
+            }
+            System.out.format("Group with id %d deleted\n", id);
         });
     }
 
@@ -77,7 +110,7 @@ public class MainMenu extends AbstractManipulator {
     public void run() {
         this.initialize();
         while (true) {
-            String n = this.promptString("hoose a command: createGroup, createDevice, listGroups, listDevices, device <id>, group <id>, schedule, exit: ");
+            String n = this.promptString("Choose a command: createGroup, createDevice, removeGroup, removeDevice, listGroups, listDevices, device <id>, group <id>, schedule, exit: ");
             for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
                     entry.getValue().run(n);
