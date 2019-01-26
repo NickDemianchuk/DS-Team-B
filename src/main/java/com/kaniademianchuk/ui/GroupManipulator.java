@@ -11,26 +11,25 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GroupManipulator {
+public class GroupManipulator extends AbstractManipulator {
     private static final Pattern p = Pattern.compile("group (\\d+)");
-    private final Scanner reader;
     private final Manager<TogglableGroup<ITogglable>> groupManager;
-    private Map<String, Runnable> commands = new HashMap<>();
+    private Map<String, Command> commands = new HashMap<>();
     private TogglableGroup<ITogglable> group;
     private boolean done = false;
 
     public GroupManipulator(Scanner reader, Manager<TogglableGroup<ITogglable>> groupManager) {
-        this.reader = reader;
+        super(reader);
         this.groupManager = groupManager;
-        commands.put("exit", () -> {
+        commands.put("exit", str -> {
             GroupManipulator.this.done = true;
         });
-        commands.put("list", () -> {
+        commands.put("list", str -> {
             System.out.println(this.group.getDevices().toString());
         });
-        commands.put("toggle", () -> {
+        commands.put("toggle", str -> {
             this.group.toggle();
-            System.out.println("Done");
+            System.out.println(this.group.getDevices().toString());
         });
     }
 
@@ -54,9 +53,9 @@ public class GroupManipulator {
             if (n.length() == 0) {
                 continue;
             }
-            for (Map.Entry<String, Runnable> entry : commands.entrySet()) {
+            for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
-                    entry.getValue().run();
+                    entry.getValue().run(n);
                 }
             }
         }
