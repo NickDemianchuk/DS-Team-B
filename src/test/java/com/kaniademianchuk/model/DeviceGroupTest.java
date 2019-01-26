@@ -1,92 +1,106 @@
-//package com.kaniademianchuk.model;
-//
-//
-//import org.junit.jupiter.api.*;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class DeviceGroupTest {
-//
-//    @Nested
-//    class NestedDeviceGroupTest {
-//        @Test
-//        void constructorTest() {
-//            DeviceGroup group1 = new DeviceGroup();
-//            assertNotNull(group1);
-//            assertEquals(0, group1.getSize());
-//
-//            DeviceGroup group2 = new DeviceGroup(
-//                    new Device.Builder()
-//                            .setId(1)
-//                            .setName("Smart bulb")
-//                            .setOn(true)
-//                            .build(),
-//                    new Device.Builder()
-//                            .setId(2)
-//                            .setName("Smart switch")
-//                            .setOn(true)
-//                            .build(),
-//                    new Device.Builder()
-//                            .setId(3)
-//                            .setName("Smart outlet")
-//                            .setOn(true)
-//                            .build());
-//            assertNotNull(group2);
-//            assertEquals(3, group2.getSize());
-//        }
-//    }
-//
-//    Device device1;
-//    Device device2;
-//    Device device3;
-//    DeviceGroup group;
-//
-//    @BeforeEach
-//    void setUp() {
-//        group = new DeviceGroup();
-//        device1 = new Device.Builder().setId(1).setName("Smart bulb").setOn(true).build();
-//        device2 = new Device.Builder().setId(2).setName("Smart switch").setOn(true).build();
-//        device3 = new Device.Builder().setId(3).setName("Smart outlet").setOn(true).build();
-//    }
-//
-//    @Test
-//    void addDevice() {
-//        assertEquals(null, group.addDevice(device1));
-//        assertEquals(null, group.addDevice(device2));
-//        assertEquals(null, group.addDevice(device3));
-//    }
-//
-//    @Test
-//    void removeDevice() {
-//        group.addDevice(device1);
-//
-//        assertEquals(device1, group.removeDevice(device1));
-//    }
-//
-//    @Test
-//    void getDeviceById() {
-//        group.addDevice(device3);
-//
-//        assertEquals(device3, group.getDeviceById(3));
-//    }
-//
-//    @Test
-//    void getSize() {
-//        assertEquals(0, group.getSize());
-//
-//        group.addDevice(device2);
-//        group.addDevice(device3);
-//
-//        assertEquals(2, group.getSize());
-//    }
-//
-//    @Test
-//    void toStringTest() {
-//        group = new DeviceGroup(device1, device2);
-//
-//        String test = "Device[Id: 1, Name: Smart bulb, isOn: true]" + System.lineSeparator() +
-//                "Device[Id: 2, Name: Smart switch, isOn: true]" + System.lineSeparator();
-//
-//        assertTrue(group.toString().equals(test));
-//    }
-//}
+package com.kaniademianchuk.model;
+
+import com.kaniademianchuk.api.IIdentifiable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DeviceGroupTest {
+
+    IIdentifiable togglable;
+    IIdentifiable dimmable;
+    DeviceGroup<IIdentifiable> deviceGroup;
+
+    @BeforeEach
+    void setUp() {
+        togglable = new DefaultTogglable("smart switch", false);
+        dimmable = new DefaultDimmable("smart bulb", 50);
+        deviceGroup = new DeviceGroup<>("smart devices", togglable, dimmable);
+    }
+
+    @Test
+    void getDevices() {
+        Collection<IIdentifiable> devices = deviceGroup.getDevices();
+
+        for (IIdentifiable device : devices) {
+            assertNotNull(device);
+        }
+    }
+
+    @Test
+    void addUnexistingDevice() {
+        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 90);
+
+        int sizeBeforeAdding = deviceGroup.getSize();
+        IIdentifiable expectedResponse = deviceGroup.addDevice(newDimmable);
+        int sizeAfterAdding = deviceGroup.getSize();
+
+        assertNull(expectedResponse);
+        assertNotEquals(sizeBeforeAdding, sizeAfterAdding);
+        assertEquals(sizeBeforeAdding + 1, sizeAfterAdding);
+    }
+
+    @Test
+    void addExistingDevice() {
+        int sizeBeforeAdding = deviceGroup.getSize();
+        IIdentifiable expectedResponse = deviceGroup.addDevice(dimmable);
+        int sizeAfterAdding = deviceGroup.getSize();
+
+        assertNotNull(expectedResponse);
+        assertEquals(sizeBeforeAdding, sizeAfterAdding);
+        assertEquals(expectedResponse, dimmable);
+    }
+
+    @Test
+    void removeUnexistingDevice() {
+        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 100);
+
+        int sizeBeforeRemoving = deviceGroup.getSize();
+        IIdentifiable expectedResponse = deviceGroup.removeDevice(newDimmable);
+        int sizeAfterRemoving = deviceGroup.getSize();
+
+        assertNull(expectedResponse);
+        assertEquals(sizeBeforeRemoving, sizeAfterRemoving);
+    }
+
+    @Test
+    void removeExistingDevice() {
+        int sizeBeforeRemoving = deviceGroup.getSize();
+        IIdentifiable expectedResponse = deviceGroup.removeDevice(dimmable);
+        int sizeAfterRemoving = deviceGroup.getSize();
+
+        assertNotNull(expectedResponse);
+        assertEquals(expectedResponse, dimmable);
+        assertNotEquals(sizeBeforeRemoving, sizeAfterRemoving);
+        assertEquals(sizeBeforeRemoving - 1, sizeAfterRemoving);
+    }
+
+    @Test
+    void getDeviceById() {
+        Integer expectedId = dimmable.getId();
+        IIdentifiable expectedDevice = deviceGroup.getDeviceById(expectedId);
+
+        assertEquals(expectedDevice, dimmable);
+    }
+
+    @Test
+    void getSize() {
+        int sizeBeforeAdding = deviceGroup.getSize();
+        IIdentifiable newTogglable = new DefaultTogglable("new smart bulb", true);
+        deviceGroup.addDevice(newTogglable);
+        int sizeAfterAdding = deviceGroup.getSize();
+
+        assertEquals(2, sizeBeforeAdding);
+        assertEquals(3, sizeAfterAdding);
+    }
+
+    @Test
+    void toStringTest() {
+        String deviceGroupToString = "DeviceGroup{id='2', name='smart devices', size=2}";
+
+        assertEquals(deviceGroupToString, deviceGroup.toString());
+    }
+}
