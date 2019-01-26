@@ -24,8 +24,12 @@ public class MainMenu extends AbstractManipulator {
         commands.put("exit", str -> System.exit(0));
         commands.put("listGroups", str -> this.listManager(groupManager));
         commands.put("listDevices", str -> this.listManager(deviceManager));
-        commands.put("device (\\d+)", str -> new DeviceManipulator(this.reader, deviceManager).run(str));
-        commands.put("group (\\d+)", str -> new GroupManipulator(this.reader, groupManager, deviceManager).run(str));
+        commands.put("device (\\d+)", str -> {
+            new DeviceManipulator(this.reader, deviceManager).run(str);
+        });
+        commands.put("group (\\d+)", str -> {
+            new GroupManipulator(this.reader, groupManager, deviceManager).run(str);
+        });
         commands.put("schedule", str -> new ScheduleManipulator(this.reader, taskManager, deviceManager).run(str));
         commands.put("createDevice", str -> {
             ITogglable device = this.addDeviceDialog();
