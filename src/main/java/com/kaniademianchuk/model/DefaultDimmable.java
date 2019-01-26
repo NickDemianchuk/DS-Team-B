@@ -2,8 +2,6 @@ package com.kaniademianchuk.model;
 
 import com.kaniademianchuk.api.IDimmable;
 
-import java.util.Objects;
-
 public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
 
     private Integer dimLevel;
@@ -27,20 +25,6 @@ public class DefaultDimmable extends AbstractIdentifiable implements IDimmable {
                 ", name='" + this.getName() + '\'' +
                 ", dimLevel=" + this.getDimLevel() +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        DefaultDimmable that = (DefaultDimmable) o;
-        return this.dimLevel.equals(that.dimLevel);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), this.dimLevel);
     }
 
     @Override
