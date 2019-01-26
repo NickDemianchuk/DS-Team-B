@@ -3,6 +3,7 @@ package com.kaniademianchuk.model;
 import com.kaniademianchuk.api.IIdentifiable;
 import com.kaniademianchuk.api.ITogglable;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TimerTask;
 
@@ -14,12 +15,39 @@ public class ScheduledTask extends TimerTask implements IIdentifiable {
     private Integer id;
     private String name;
 
-    public ScheduledTask(Manager<ITogglable> source, int subjectId, ScheduledTaskType task) {
+    public ScheduledTask(String name, Manager<ITogglable> source, int subjectId, ScheduledTaskType task) {
+        this.name = name;
         this.source = source;
         this.subjectId = subjectId;
         this.task = task;
         this.id = latestId++;
-        this.name = String.format("Task %d", this.id);
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduledTask{" +
+                "taskId=" + id +
+                ", subjectId=" + subjectId +
+                ", task=" + task +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScheduledTask that = (ScheduledTask) o;
+        return Objects.equals(source, that.source) &&
+                Objects.equals(subjectId, that.subjectId) &&
+                task == that.task &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, subjectId, task, id, name);
     }
 
     @Override
