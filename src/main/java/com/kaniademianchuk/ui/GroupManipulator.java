@@ -43,7 +43,7 @@ public class GroupManipulator extends AbstractManipulator {
             Integer id = match.get();
             Optional<ITogglable> device = GroupManipulator.this.deviceManager.getDeviceById(id);
             if (!device.isPresent()) {
-                System.out.format("Device with id %d not found\n", id);
+                System.err.format("Device with id %d not found\n", id);
                 return;
             }
             if (GroupManipulator.this.group.getDeviceById(id) != null) {
