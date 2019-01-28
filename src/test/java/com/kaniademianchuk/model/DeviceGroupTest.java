@@ -74,7 +74,6 @@ class DeviceGroupTest {
         int sizeAfterRemoving = deviceGroup.getSize();
 
         assertTrue(expectedResponse);
-        assertEquals(expectedResponse, dimmable);
         assertNotEquals(sizeBeforeRemoving, sizeAfterRemoving);
         assertEquals(sizeBeforeRemoving - 1, sizeAfterRemoving);
     }
@@ -100,7 +99,10 @@ class DeviceGroupTest {
 
     @Test
     void toStringTest() {
-        String deviceGroupToString = "DeviceGroup{id='2', name='smart devices', size=2}";
+        int groupId = deviceGroup.getId();
+        int groupSize = deviceGroup.getSize();
+        String deviceGroupToString = "DeviceGroup{id='" + groupId +
+                "', name='smart devices', size="+groupSize+"}";
 
         assertEquals(deviceGroupToString, deviceGroup.toString());
     }

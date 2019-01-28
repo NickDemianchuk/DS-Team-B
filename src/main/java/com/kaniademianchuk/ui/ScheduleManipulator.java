@@ -5,15 +5,12 @@ import com.kaniademianchuk.model.Manager;
 import com.kaniademianchuk.model.ScheduledTask;
 import com.kaniademianchuk.model.ScheduledTaskType;
 import com.kaniademianchuk.model.Scheduler;
+import com.kaniademianchuk.util.DateUtil;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ScheduleManipulator extends AbstractManipulator {
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static int DAILY = 1000 * 60 * 60 * 24;
-    private static int WEEKLY = DAILY * 7;
     private final Manager<ScheduledTask> taskManager;
     private final Manager<ITogglable> deviceManager;
     private final Scheduler scheduler;
@@ -55,7 +52,7 @@ public class ScheduleManipulator extends AbstractManipulator {
         while (true) {
             String dateString = this.promptString("Time (eg. 2009-12-31 23:59:59): ");
             try {
-                initialDate = ScheduleManipulator.format.parse(dateString);
+                initialDate = DateUtil.FORMAT.parse(dateString);
                 break;
             } catch (ParseException e) {
                 this.format("Invalid date %s\n", e.toString());
@@ -68,9 +65,9 @@ public class ScheduleManipulator extends AbstractManipulator {
             if (intervalString.length() == 0) {
                 interval = Optional.empty();
             } else if (intervalString.equals("daily")) {
-                interval = Optional.of(DAILY);
+                interval = Optional.of(DateUtil.DAILY);
             } else if (intervalString.equals("weekly")) {
-                interval = Optional.of(WEEKLY);
+                interval = Optional.of(DateUtil.WEEKLY);
             } else {
                 continue;
             }
