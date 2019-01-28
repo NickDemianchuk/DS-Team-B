@@ -48,7 +48,7 @@ public class EventHandlerManipulator extends AbstractManipulator {
 
         Optional<DefaultEventHandler> task = this.eventBroker.getDeviceById(id);
         if (!task.isPresent()) {
-            System.err.format("Handler with id %d not found\n", id);
+            this.errFormat("Handler with id %d not found\n", id);
             return;
         }
         this.eventBroker.removeDevice(task.get());
@@ -101,7 +101,7 @@ public class EventHandlerManipulator extends AbstractManipulator {
         DefaultEventHandler handler = new DefaultEventHandler(name, conditions, action);
         this.eventBroker.addDevice(handler);
 
-        System.out.format("Created handler with id %d\n", handler.getId());
+        this.format("Created handler with id %d\n", handler.getId());
     }
 
     private Condition createNameCondition(String nameRegex) {
@@ -156,5 +156,10 @@ public class EventHandlerManipulator extends AbstractManipulator {
                 }
             }
         }
+    }
+
+    @Override
+    String getPrefix() {
+        return "[EventHandler]";
     }
 }

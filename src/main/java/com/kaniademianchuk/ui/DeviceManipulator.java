@@ -47,7 +47,7 @@ public class DeviceManipulator extends AbstractManipulator {
             }
             Optional<Integer> dimValue = matchFirstInteger(dimPattern, str);
             if (!dimValue.isPresent()) {
-                System.out.format("Invalid value\n");
+                this.format("Invalid value\n");
                 return;
             }
             Integer value = dimValue.get();
@@ -55,7 +55,7 @@ public class DeviceManipulator extends AbstractManipulator {
                 ((IDimmable) this.device).setDimLevel(value);
                 printDevice();
             } catch (Exception e) {
-                System.err.format("Could not set dimLevel %d, %s\n", value, e.toString());
+                this.errFormat("Could not set dimLevel %d, %s\n", value, e.toString());
             }
         });
 
@@ -73,13 +73,13 @@ public class DeviceManipulator extends AbstractManipulator {
         Integer id = Integer.parseInt(matcher.group(1));
         Optional<ITogglable> optDevice = deviceManager.getDeviceById(id);
         if (!optDevice.isPresent()) {
-            System.out.format("Device with id %d not found\n", id);
+            this.format("Device with id %d not found\n", id);
             return;
         }
         this.device = optDevice.get();
 
         while (!done) {
-            System.out.print("Choose a command: ");
+            System.out.print(this.getPrefix() + "Choose a command: ");
             if (this.device instanceof IDimmable) {
                 System.out.print("dim <0-100>, ");
             }
@@ -94,5 +94,10 @@ public class DeviceManipulator extends AbstractManipulator {
                 }
             }
         }
+    }
+
+    @Override
+    String getPrefix() {
+        return "[Device]";
     }
 }

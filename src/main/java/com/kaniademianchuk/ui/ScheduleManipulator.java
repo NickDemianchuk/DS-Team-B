@@ -42,7 +42,7 @@ public class ScheduleManipulator extends AbstractManipulator {
 
         Optional<ScheduledTask> task = this.taskManager.getDeviceById(id);
         if (!task.isPresent()) {
-            System.err.format("Task with id %d not found\n", id);
+            this.errFormat("Task with id %d not found\n", id);
             return;
         }
         task.get().cancel();
@@ -58,7 +58,7 @@ public class ScheduleManipulator extends AbstractManipulator {
                 initialDate = ScheduleManipulator.format.parse(dateString);
                 break;
             } catch (ParseException e) {
-                System.out.format("Invalid date %s\n", e.toString());
+                this.format("Invalid date %s\n", e.toString());
             }
         }
         Optional<Integer> interval;
@@ -98,7 +98,7 @@ public class ScheduleManipulator extends AbstractManipulator {
         ScheduledTask scheduledTask = new ScheduledTask(name, this.deviceManager, id, actualTask);
         this.scheduler.scheduleTask(initialDate, interval, scheduledTask);
         this.taskManager.addDevice(scheduledTask);
-        System.out.format("Created task with id %d\n", scheduledTask.getId());
+        this.format("Created task with id %d\n", scheduledTask.getId());
     }
 
     public void run(String input) {
@@ -110,5 +110,10 @@ public class ScheduleManipulator extends AbstractManipulator {
                 }
             }
         }
+    }
+
+    @Override
+    String getPrefix() {
+        return "[Schedule]";
     }
 }

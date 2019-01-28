@@ -38,7 +38,7 @@ public class MainMenu extends AbstractManipulator {
         commands.put("createDevice", str -> {
             ITogglable device = this.addDeviceDialog();
             this.deviceManager.addDevice(device);
-            System.out.format("Added device with id %d\n", device.getId());
+            this.format("Added device with id %d\n", device.getId());
         });
         commands.put("removeDevice (\\d+)", str -> {
             Optional<Integer> match = matchFirstInteger(removeDevicePattern, str);
@@ -48,18 +48,18 @@ public class MainMenu extends AbstractManipulator {
             Integer id = match.get();
             boolean success = MainMenu.this.deviceManager.removeDevice(id);
             if (!success) {
-                System.err.format("Device with id %d not found\n", id);
+                this.errFormat("Device with id %d not found\n", id);
                 return;
             }
             for (TogglableGroup<ITogglable> group : MainMenu.this.groupManager.getAllDevices()) {
                 group.removeDevice(id);
             }
-            System.out.format("Device with id %d deleted\n", id);
+            this.format("Device with id %d deleted\n", id);
         });
         commands.put("createGroup", str -> {
             TogglableGroup<ITogglable> newGroup = this.addGroupDialog();
             this.groupManager.addDevice(newGroup);
-            System.out.format("Added group with id %d\n", newGroup.getId());
+            this.format("Added group with id %d\n", newGroup.getId());
         });
         commands.put("removeGroup (\\d+)", str -> {
             Optional<Integer> match = matchFirstInteger(removeGroupPattern, str);
@@ -69,11 +69,16 @@ public class MainMenu extends AbstractManipulator {
             Integer id = match.get();
             boolean success = MainMenu.this.groupManager.removeDevice(id);
             if (!success) {
-                System.err.format("Group with id %d not found\n", id);
+                this.errFormat("Group with id %d not found\n", id);
                 return;
             }
-            System.out.format("Group with id %d deleted\n", id);
+            this.format("Group with id %d deleted\n", id);
         });
+    }
+
+    @Override
+    String getPrefix() {
+        return "";
     }
 
     public void listManager(Manager manager) {

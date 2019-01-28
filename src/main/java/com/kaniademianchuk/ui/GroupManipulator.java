@@ -43,11 +43,11 @@ public class GroupManipulator extends AbstractManipulator {
             Integer id = match.get();
             Optional<ITogglable> device = GroupManipulator.this.deviceManager.getDeviceById(id);
             if (!device.isPresent()) {
-                System.err.format("Device with id %d not found\n", id);
+                this.errFormat("Device with id %d not found\n", id);
                 return;
             }
             if (GroupManipulator.this.group.getDeviceById(id) != null) {
-                System.err.format("Group contains device with id %d already\n", id);
+                this.errFormat("Group contains device with id %d already\n", id);
                 return;
             }
             GroupManipulator.this.group.addDevice(device.get());
@@ -61,7 +61,7 @@ public class GroupManipulator extends AbstractManipulator {
             Integer id = match.get();
             boolean success = GroupManipulator.this.group.removeDevice(id);
             if (!success) {
-                System.err.format("Device with id %d not found in group\n", id);
+                this.errFormat("Device with id %d not found in group\n", id);
             }
             printDevicesInGroup();
         });
@@ -80,22 +80,23 @@ public class GroupManipulator extends AbstractManipulator {
         Integer id = Integer.parseInt(m.group(1));
         Optional<TogglableGroup<ITogglable>> optDevice = groupManager.getDeviceById(id);
         if (!optDevice.isPresent()) {
-            System.out.format("Device with id %d not found\n", id);
+            this.format("Device with id %d not found\n", id);
             return;
         }
         this.group = optDevice.get();
 
         while (!done) {
-            System.out.print("Choose a command: addDevice <id>, removeDevice <id>, list, toggle, exit: ");
-            String n = reader.nextLine();
-            if (n.length() == 0) {
-                continue;
-            }
+            String n = promptString("Choose a command: addDevice <id>, removeDevice <id>, list, toggle, exit: ");
             for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
                     entry.getValue().run(n);
                 }
             }
         }
+    }
+
+    @Override
+    String getPrefix() {
+        return "[Group]";
     }
 }
