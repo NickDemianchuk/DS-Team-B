@@ -1,6 +1,7 @@
 package com.kaniademianchuk.model;
 
 import com.kaniademianchuk.api.IIdentifiable;
+import com.kaniademianchuk.util.MockEventHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +17,8 @@ class DeviceGroupTest {
 
     @BeforeEach
     void setUp() {
-        togglable = new DefaultTogglable("smart switch", false);
-        dimmable = new DefaultDimmable("smart bulb", 50);
+        togglable = new DefaultTogglable("smart switch", false, new MockEventHandler());
+        dimmable = new DefaultDimmable("smart bulb", 50, new MockEventHandler());
         deviceGroup = new DeviceGroup<>("smart devices", togglable, dimmable);
     }
 
@@ -32,7 +33,7 @@ class DeviceGroupTest {
 
     @Test
     void addUnexistingDevice() {
-        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 90);
+        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 90, new MockEventHandler());
 
         int sizeBeforeAdding = deviceGroup.getSize();
         IIdentifiable expectedResponse = deviceGroup.addDevice(newDimmable);
@@ -56,7 +57,7 @@ class DeviceGroupTest {
 
     @Test
     void removeUnexistingDevice() {
-        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 100);
+        IIdentifiable newDimmable = new DefaultDimmable("new smart bulb", 100, new MockEventHandler());
 
         int sizeBeforeRemoving = deviceGroup.getSize();
         boolean expectedResponse = deviceGroup.removeDevice(newDimmable);
@@ -89,7 +90,7 @@ class DeviceGroupTest {
     @Test
     void getSize() {
         int sizeBeforeAdding = deviceGroup.getSize();
-        IIdentifiable newTogglable = new DefaultTogglable("new smart bulb", true);
+        IIdentifiable newTogglable = new DefaultTogglable("new smart bulb", true, new MockEventHandler());
         deviceGroup.addDevice(newTogglable);
         int sizeAfterAdding = deviceGroup.getSize();
 

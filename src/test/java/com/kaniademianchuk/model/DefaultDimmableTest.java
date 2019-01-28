@@ -1,5 +1,6 @@
 package com.kaniademianchuk.model;
 
+import com.kaniademianchuk.util.MockEventHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +15,8 @@ class DefaultDimmableTest {
 
     @BeforeEach
     void setUp() {
-        turnedOffDevice = new DefaultDimmable("turnedOffDevice", 0);
-        turnedOnDevice = new DefaultDimmable("turnedOnDevice", 100);
+        turnedOffDevice = new DefaultDimmable("turnedOffDevice", 0, new MockEventHandler());
+        turnedOnDevice = new DefaultDimmable("turnedOnDevice", 100, new MockEventHandler());
     }
 
     @Test
@@ -63,7 +64,7 @@ class DefaultDimmableTest {
 
     @Test
     void getId() {
-        DefaultDimmable dimmable = new DefaultDimmable("dimmable", 40);
+        DefaultDimmable dimmable = new DefaultDimmable("dimmable", 40, new MockEventHandler());
         Integer expectedId = AbstractIdentifiable.receiveAndIncrementLatestId() - 1;
 
         assertEquals(expectedId, dimmable.getId());
@@ -137,7 +138,7 @@ class DefaultDimmableTest {
 
     @Test
     void equalsTest() {
-        DefaultDimmable turnedOffDimmable = new DefaultDimmable("turnedOffDevice", 0);
+        DefaultDimmable turnedOffDimmable = new DefaultDimmable("turnedOffDevice", 0, new MockEventHandler());
         Integer desiredId = turnedOffDevice.getId();
 
         turnedOffDimmable.setId(desiredId);
@@ -147,7 +148,7 @@ class DefaultDimmableTest {
 
     @Test
     void hashCodeTest() {
-        DefaultDimmable turnedOffDimmable = new DefaultDimmable("turnedOffDevice", 0);
+        DefaultDimmable turnedOffDimmable = new DefaultDimmable("turnedOffDevice", 0, new MockEventHandler());
         Integer desiredId = turnedOffDevice.getId();
 
         turnedOffDimmable.setId(desiredId);

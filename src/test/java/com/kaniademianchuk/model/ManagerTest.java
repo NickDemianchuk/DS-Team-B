@@ -1,6 +1,7 @@
 package com.kaniademianchuk.model;
 
 import com.kaniademianchuk.api.IIdentifiable;
+import com.kaniademianchuk.util.MockEventHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +19,8 @@ class ManagerTest {
     @BeforeEach
     void setUp(){
         manager = new Manager<>();
-        togglable = new DefaultTogglable("smart switch", true);
-        dimmable = new DefaultDimmable("smart bulb", 50);
+        togglable = new DefaultTogglable("smart switch", true, new MockEventHandler());
+        dimmable = new DefaultDimmable("smart bulb", 50, new MockEventHandler());
         deviceGroup = new DeviceGroup<>("device group", togglable, dimmable);
     }
 

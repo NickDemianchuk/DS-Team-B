@@ -1,20 +1,24 @@
 package com.kaniademianchuk.model;
 
+import com.kaniademianchuk.api.IEventHandler;
 import com.kaniademianchuk.api.ITogglable;
+import com.kaniademianchuk.events.EventHandlerType;
 
 import java.util.Objects;
 
 public class DefaultTogglable extends AbstractIdentifiable implements ITogglable {
 
+    private final IEventHandler eventListener;
     private boolean isOn;
 
-    private DefaultTogglable(Integer id, String name, boolean isOn) {
+    private DefaultTogglable(Integer id, String name, boolean isOn, IEventHandler eventListener) {
         super(id, name);
         this.isOn = isOn;
+        this.eventListener = eventListener;
     }
 
-    public DefaultTogglable(String name, boolean isOn) {
-        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, isOn);
+    public DefaultTogglable(String name, boolean isOn, IEventHandler evenListener) {
+        this(AbstractIdentifiable.receiveAndIncrementLatestId(), name, isOn, evenListener);
     }
 
     @Override
@@ -33,12 +37,18 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
 
     @Override
     public void turnOn() {
-        this.isOn = true;
+        synchronized (this) {
+            this.isOn = true;
+        }
+        this.eventListener.handle(this, EventHandlerType.TURN_ON);
     }
 
     @Override
     public void turnOff() {
-        this.isOn = false;
+        synchronized (this) {
+            this.isOn = false;
+        }
+        this.eventListener.handle(this, EventHandlerType.TURN_OFF);
     }
 
     @Override
@@ -52,7 +62,11 @@ public class DefaultTogglable extends AbstractIdentifiable implements ITogglable
 
     @Override
     public void toggle() {
-        this.isOn = !this.isOn;
+        if (this.isOn()) {
+            this.turnOff();
+        } else {
+            this.turnOn();
+        }
     }
 
     @Override

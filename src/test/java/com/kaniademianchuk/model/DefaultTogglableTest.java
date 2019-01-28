@@ -1,5 +1,6 @@
 package com.kaniademianchuk.model;
 
+import com.kaniademianchuk.util.MockEventHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +13,8 @@ class DefaultTogglableTest {
 
     @BeforeEach
     void setUp() {
-        turnedOffDevice = new DefaultTogglable("turnedOffDevice", false);
-        turnedOnDevice = new DefaultTogglable("turnedOnDevice", true);
+        turnedOffDevice = new DefaultTogglable("turnedOffDevice", false, new MockEventHandler());
+        turnedOnDevice = new DefaultTogglable("turnedOnDevice", true, new MockEventHandler());
     }
 
     @Test
@@ -61,7 +62,7 @@ class DefaultTogglableTest {
 
     @Test
     void getId() {
-        DefaultTogglable togglable = new DefaultTogglable("togglable", true);
+        DefaultTogglable togglable = new DefaultTogglable("togglable", true, new MockEventHandler());
         Integer expectedId = AbstractIdentifiable.receiveAndIncrementLatestId() - 1;
 
         assertEquals(expectedId, togglable.getId());
@@ -115,7 +116,7 @@ class DefaultTogglableTest {
 
     @Test
     void equalsTest() {
-        DefaultTogglable turnedOffTogglable = new DefaultTogglable("turnedOffDevice", false);
+        DefaultTogglable turnedOffTogglable = new DefaultTogglable("turnedOffDevice", false, new MockEventHandler());
         Integer desiredId = turnedOffDevice.getId();
 
         turnedOffTogglable.setId(desiredId);
@@ -125,7 +126,7 @@ class DefaultTogglableTest {
 
     @Test
     void hashCodeTest() {
-        DefaultTogglable turnedOffTogglable = new DefaultTogglable("turnedOffDevice", false);
+        DefaultTogglable turnedOffTogglable = new DefaultTogglable("turnedOffDevice", false, new MockEventHandler());
         Integer desiredId = turnedOffDevice.getId();
 
         turnedOffTogglable.setId(desiredId);

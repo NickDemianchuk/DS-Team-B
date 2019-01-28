@@ -3,6 +3,7 @@ package com.kaniademianchuk.ui;
 import com.kaniademianchuk.api.IDimmable;
 import com.kaniademianchuk.api.ITogglable;
 import com.kaniademianchuk.model.*;
+import com.kaniademianchuk.util.MockEventHandler;
 import com.kaniademianchuk.util.MockUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,8 @@ class GroupManipulatorTest {
     void setUp() {
         groupManager = new Manager<>();
         deviceManager = new Manager<>();
-        testDevice0 = new DefaultTogglable("TestDevice0", true);
-        testDevice1 = new DefaultDimmable("TestDevice1", IDimmable.MAX_DIM_LEVEL);
+        testDevice0 = new DefaultTogglable("TestDevice0", true, new MockEventHandler());
+        testDevice1 = new DefaultDimmable("TestDevice1", IDimmable.MAX_DIM_LEVEL, new MockEventHandler());
         deviceGroup = new TogglableGroup<>("smart devices", testDevice0, testDevice1);
         deviceManager.addDevice(testDevice0);
         deviceManager.addDevice(testDevice1);
@@ -37,7 +38,7 @@ class GroupManipulatorTest {
 
     @Test
     void addDevice() {
-        ITogglable newDevice = new DefaultDimmable("new smart bulb", IDimmable.MAX_DIM_LEVEL);
+        ITogglable newDevice = new DefaultDimmable("new smart bulb", IDimmable.MAX_DIM_LEVEL, new MockEventHandler());
         deviceManager.addDevice(newDevice);
         int newId = newDevice.getId();
         MockUtil.mockCommands("addDevice " + newId, "exit");
@@ -86,7 +87,7 @@ class GroupManipulatorTest {
 
     @Test
     void removeDevice() {
-        ITogglable deviceToBeRemoved = new DefaultTogglable("useless smart bulb", false);
+        ITogglable deviceToBeRemoved = new DefaultTogglable("useless smart bulb", false, new MockEventHandler());
         deviceManager.addDevice(deviceToBeRemoved);
         int idToBeRemoved = deviceToBeRemoved.getId();
         deviceGroup.addDevice(deviceToBeRemoved);

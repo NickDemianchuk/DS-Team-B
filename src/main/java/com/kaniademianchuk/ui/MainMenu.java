@@ -2,6 +2,8 @@ package com.kaniademianchuk.ui;
 
 import com.kaniademianchuk.api.IDimmable;
 import com.kaniademianchuk.api.ITogglable;
+import com.kaniademianchuk.events.DefaultEventHandler;
+import com.kaniademianchuk.events.EventBroker;
 import com.kaniademianchuk.model.*;
 
 import java.util.HashMap;
@@ -13,10 +15,11 @@ import java.util.regex.Pattern;
 public class MainMenu extends AbstractManipulator {
     private static final Pattern removeDevicePattern = Pattern.compile("removeDevice (\\d+)");
     private static final Pattern removeGroupPattern = Pattern.compile("removeGroup (\\d+)");
-    private Manager<TogglableGroup<ITogglable>> groupManager = new Manager<TogglableGroup<ITogglable>>();
-    private Manager<ITogglable> deviceManager = new Manager<ITogglable>();
-    private Manager<ScheduledTask> taskManager = new Manager<ScheduledTask>();
+    private Manager<TogglableGroup<ITogglable>> groupManager = new Manager<>();
+    private Manager<ITogglable> deviceManager = new Manager<>();
+    private Manager<ScheduledTask> taskManager = new Manager<>();
     private Map<String, Command> commands = new HashMap<>();
+    private EventBroker<DefaultEventHandler> eventBroker = new EventBroker<>();
 
     public MainMenu(Scanner reader) {
         super(reader);
@@ -31,6 +34,7 @@ public class MainMenu extends AbstractManipulator {
             new GroupManipulator(this.reader, groupManager, deviceManager).run(str);
         });
         commands.put("schedule", str -> new ScheduleManipulator(this.reader, taskManager, deviceManager).run(str));
+        commands.put("eventHandlers", str -> new EventHandlerManipulator(this.reader, this.taskManager, this.deviceManager, this.eventBroker).run(str));
         commands.put("createDevice", str -> {
             ITogglable device = this.addDeviceDialog();
             this.deviceManager.addDevice(device);
@@ -77,9 +81,9 @@ public class MainMenu extends AbstractManipulator {
     }
 
     public void initialize() {
-        DefaultTogglable device1 = new DefaultTogglable("Outlet1", false);
-        DefaultTogglable device2 = new DefaultTogglable("Outlet2", false);
-        DefaultTogglable device3 = new DefaultTogglable("Outlet3", false);
+        DefaultTogglable device1 = new DefaultTogglable("Outlet1", false, eventBroker);
+        DefaultTogglable device2 = new DefaultTogglable("Outlet2", false, eventBroker);
+        DefaultTogglable device3 = new DefaultTogglable("Outlet3", false, eventBroker);
 
         this.groupManager.addDevice(new TogglableGroup<ITogglable>("PowerSwitch1",
                 device1,
@@ -99,9 +103,9 @@ public class MainMenu extends AbstractManipulator {
         boolean isOn = reader.nextBoolean();
         reader.nextLine();
         if (type.equals("toggle")) {
-            return new DefaultTogglable(toggleName, isOn);
+            return new DefaultTogglable(toggleName, isOn, eventBroker);
         } else {
-            return new DefaultDimmable(toggleName, isOn ? IDimmable.MAX_DIM_LEVEL : IDimmable.MIN_DIM_LEVEL);
+            return new DefaultDimmable(toggleName, isOn ? IDimmable.MAX_DIM_LEVEL : IDimmable.MIN_DIM_LEVEL, eventBroker);
         }
     }
 
@@ -114,7 +118,7 @@ public class MainMenu extends AbstractManipulator {
     public void run() {
         this.initialize();
         while (true) {
-            String n = this.promptString("Choose a command: createGroup, createDevice, removeGroup, removeDevice, listGroups, listDevices, device <id>, group <id>, schedule, exit: ");
+            String n = this.promptString("Choose a command: createGroup, createDevice, removeGroup, removeDevice, eventHandlers, listGroups, listDevices, device <id>, group <id>, schedule, exit: ");
             for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
                     entry.getValue().run(n);

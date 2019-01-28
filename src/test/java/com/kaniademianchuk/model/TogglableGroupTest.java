@@ -1,5 +1,6 @@
 package com.kaniademianchuk.model;
 
+import com.kaniademianchuk.util.MockEventHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,8 @@ class TogglableGroupTest {
 
     @BeforeEach
     void setUp() {
-        smartSwitch = new DefaultTogglable("smart switch", false);
-        smartBulb = new DefaultTogglable("smart bulb", true);
+        smartSwitch = new DefaultTogglable("smart switch", false, new MockEventHandler());
+        smartBulb = new DefaultTogglable("smart bulb", true, new MockEventHandler());
         togglableGroup = new TogglableGroup("togglable group", smartBulb, smartSwitch);
     }
 
