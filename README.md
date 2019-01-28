@@ -1,6 +1,6 @@
-# Homework 1
+# Homework 1 [![Build Status](https://travis-ci.com/NickDemianchuk/DS-Team-B.svg?branch=master)](https://travis-ci.com/NickDemianchuk/DS-Team-B)
 
-By Mykola Demianchuk & Robert Kania
+By Mykola Demianchuk & Robert Kania 
 
 ## Functions
 The project supports the following:
