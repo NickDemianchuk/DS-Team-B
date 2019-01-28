@@ -15,7 +15,7 @@ public abstract class AbstractManipulator {
 
     protected String promptString(String prompt) {
         while (true) {
-            System.out.print(prompt);
+            System.out.print(this.getPrefix() + prompt);
             String toggleName = reader.nextLine();
             if (toggleName.length() > 0) {
                 return toggleName;
@@ -25,14 +25,14 @@ public abstract class AbstractManipulator {
 
     protected String promptOptionalString(String prompt) {
         while (true) {
-            System.out.print(prompt);
+            System.out.print(this.getPrefix() + prompt);
             String toggleName = reader.nextLine();
         }
     }
 
     protected String promptOneFromMany(String prompt, String... choices) {
         while (true) {
-            System.out.print(prompt);
+            System.out.print(this.getPrefix() + prompt);
             String input = this.reader.nextLine();
             for (String choice : choices) {
                 if (choice.equals(input)) {
@@ -50,6 +50,16 @@ public abstract class AbstractManipulator {
         Integer id = Integer.parseInt(m.group(1));
         return Optional.of(id);
     }
+
+    protected void format(String format, Object... args) {
+        System.out.format(this.getPrefix() + format, args);
+    }
+
+    protected void errFormat(String format, Object... args) {
+        System.err.format(this.getPrefix() + format, args);
+    }
+
+    abstract String getPrefix();
 
     interface Command {
         void run(String command);
