@@ -73,7 +73,7 @@ class ScheduledTaskTest {
 
     @Test
     void getId() {
-        Integer expectedId = new Integer(ScheduledTask.getLatestId());
+        Integer expectedId = new Integer(ScheduledTask.testGetLatestId());
 
         assertEquals(expectedId, scheduledTask.getId());
     }
