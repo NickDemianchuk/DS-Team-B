@@ -33,6 +33,9 @@ public class MainMenu extends AbstractManipulator {
         commands.put("group (\\d+)", str -> {
             new GroupManipulator(this.reader, groupManager, deviceManager).run(str);
         });
+        commands.put("help", str->{
+            this.format("Commands: \ncreateGroup, createDevice, removeGroup, removeDevice\neventHandlers, listGroups, listDevices\ndevice <id>, group <id>, schedule, exit\n");
+        });
         commands.put("schedule", str -> new ScheduleManipulator(this.reader, taskManager, deviceManager).run(str));
         commands.put("eventHandlers", str -> new EventHandlerManipulator(this.reader, this.taskManager, this.deviceManager, this.eventBroker).run(str));
         commands.put("createDevice", str -> {
@@ -123,7 +126,7 @@ public class MainMenu extends AbstractManipulator {
     public void run() {
         this.initialize();
         while (true) {
-            String n = this.promptString("Choose a command: createGroup, createDevice, removeGroup, removeDevice, eventHandlers, listGroups, listDevices, device <id>, group <id>, schedule, exit: ");
+            String n = this.promptString("Choose a command, help for list of commands: ");
             for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {
                     entry.getValue().run(n);
