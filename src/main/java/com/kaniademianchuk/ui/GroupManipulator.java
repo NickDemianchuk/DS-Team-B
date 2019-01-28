@@ -3,18 +3,15 @@ package com.kaniademianchuk.ui;
 import com.kaniademianchuk.api.ITogglable;
 import com.kaniademianchuk.model.Manager;
 import com.kaniademianchuk.model.TogglableGroup;
+import com.kaniademianchuk.util.PatternUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GroupManipulator extends AbstractManipulator {
-    private static final Pattern groupPattern = Pattern.compile("group (\\d+)");
-    private static final Pattern addDevicePattern = Pattern.compile("addDevice (\\d+)");
-    private static final Pattern removeDevicePattern = Pattern.compile("removeDevice (\\d+)");
     private final Manager<TogglableGroup<ITogglable>> groupManager;
     private final Manager<ITogglable> deviceManager;
     private Map<String, Command> commands = new HashMap<>();
@@ -35,8 +32,8 @@ public class GroupManipulator extends AbstractManipulator {
             this.group.toggle();
             printDevicesInGroup();
         });
-        commands.put("addDevice (\\d+)", str -> {
-            Optional<Integer> match = matchFirstInteger(addDevicePattern, str);
+        commands.put(PatternUtil.ADD_DEVICE, str -> {
+            Optional<Integer> match = matchFirstInteger(PatternUtil.ADD_DEVICE_PATTERN, str);
             if (!match.isPresent()) {
                 return;
             }
@@ -53,8 +50,8 @@ public class GroupManipulator extends AbstractManipulator {
             GroupManipulator.this.group.addDevice(device.get());
             printDevicesInGroup();
         });
-        commands.put("removeDevice (\\d+)", str -> {
-            Optional<Integer> match = matchFirstInteger(removeDevicePattern, str);
+        commands.put(PatternUtil.REMOVE_DEVICE, str -> {
+            Optional<Integer> match = matchFirstInteger(PatternUtil.REMOVE_DEVICE_PATTERN, str);
             if (!match.isPresent()) {
                 return;
             }
@@ -73,7 +70,7 @@ public class GroupManipulator extends AbstractManipulator {
 
 
     public void run(String input) {
-        Matcher m = groupPattern.matcher(input);
+        Matcher m = PatternUtil.GROUP_PATTERN.matcher(input);
         if (!m.find()) {
             return;
         }

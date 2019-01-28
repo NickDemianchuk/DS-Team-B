@@ -3,17 +3,15 @@ package com.kaniademianchuk.ui;
 import com.kaniademianchuk.api.IDimmable;
 import com.kaniademianchuk.api.ITogglable;
 import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.util.PatternUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DeviceManipulator extends AbstractManipulator {
-    private static final Pattern devicePattern = Pattern.compile("device (\\d+)");
-    private static final Pattern dimPattern = Pattern.compile("dim (\\d+)");
     private final Manager<ITogglable> deviceManager;
     private Map<String, Command> commands = new HashMap<>();
     private ITogglable device;
@@ -41,11 +39,11 @@ public class DeviceManipulator extends AbstractManipulator {
             printDevice();
         });
 
-        commands.put("dim (\\d+)", (str) -> {
+        commands.put(PatternUtil.DIM, (str) -> {
             if (!(this.device instanceof IDimmable)) {
                 return;
             }
-            Optional<Integer> dimValue = matchFirstInteger(dimPattern, str);
+            Optional<Integer> dimValue = matchFirstInteger(PatternUtil.DIM_PATTERN, str);
             if (!dimValue.isPresent()) {
                 this.format("Invalid value\n");
                 return;
@@ -66,7 +64,7 @@ public class DeviceManipulator extends AbstractManipulator {
     }
 
     public void run(String input) {
-        Matcher matcher = devicePattern.matcher(input);
+        Matcher matcher = PatternUtil.DEVICE_PATTERN.matcher(input);
         if (!matcher.find()) {
             return;
         }

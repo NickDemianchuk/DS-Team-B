@@ -23,13 +23,6 @@ public abstract class AbstractManipulator {
         }
     }
 
-    protected String promptOptionalString(String prompt) {
-        while (true) {
-            System.out.print(this.getPrefix() + prompt);
-            String toggleName = reader.nextLine();
-        }
-    }
-
     protected String promptOneFromMany(String prompt, String... choices) {
         while (true) {
             System.out.print(this.getPrefix() + prompt);
