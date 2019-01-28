@@ -5,7 +5,7 @@ import com.kaniademianchuk.api.IIdentifiable;
 
 import java.util.Objects;
 
-abstract class AbstractIdentifiable implements IIdentifiable {
+public abstract class AbstractIdentifiable implements IIdentifiable {
 
     private static int latestId = 0;
     private Integer id;
@@ -14,6 +14,10 @@ abstract class AbstractIdentifiable implements IIdentifiable {
     protected AbstractIdentifiable(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public static int receiveAndIncrementLatestId() {
+        return AbstractIdentifiable.latestId++;
     }
 
     @Override
@@ -36,21 +40,17 @@ abstract class AbstractIdentifiable implements IIdentifiable {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return this.name;
     }
 
-    public static int receiveAndIncrementLatestId() {
-        return latestId++;
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 }

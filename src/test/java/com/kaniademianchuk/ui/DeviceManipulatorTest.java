@@ -5,6 +5,7 @@ import com.kaniademianchuk.api.ITogglable;
 import com.kaniademianchuk.model.DefaultDimmable;
 import com.kaniademianchuk.model.DefaultTogglable;
 import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.util.MockEventHandler;
 import com.kaniademianchuk.util.MockUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,8 @@ class DeviceManipulatorTest {
     @BeforeEach
     void setUp() {
         deviceManager = new Manager<>();
-        testDevice0 = new DefaultTogglable("TestDevice0", true);
-        testDevice1 = new DefaultDimmable("TestDevice1", IDimmable.MAX_DIM_LEVEL);
+        testDevice0 = new DefaultTogglable("TestDevice0", true, new MockEventHandler());
+        testDevice1 = new DefaultDimmable("TestDevice1", IDimmable.MAX_DIM_LEVEL, new MockEventHandler());
         deviceManager.addDevice(testDevice0);
         deviceManager.addDevice(testDevice1);
     }
