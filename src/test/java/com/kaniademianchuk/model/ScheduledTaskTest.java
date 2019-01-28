@@ -62,7 +62,7 @@ class ScheduledTaskTest {
     }
 
     @Test
-    void run() {
+    void runTest() {
         boolean stateBeforeExecution = device0.isOn();
 
         scheduledTask.run();
@@ -72,14 +72,14 @@ class ScheduledTaskTest {
     }
 
     @Test
-    void getId() {
+    void getIdTest() {
         Integer expectedId = new Integer(ScheduledTask.testGetLatestId());
 
         assertEquals(expectedId, scheduledTask.getId());
     }
 
     @Test
-    void setId() {
+    void setIdTest() {
         Integer expectedId = scheduledTask.getId() + 1;
 
         scheduledTask.setId(expectedId);
@@ -88,14 +88,14 @@ class ScheduledTaskTest {
     }
 
     @Test
-    void getName() {
+    void getNameTest() {
         String expectedName = "toggle";
 
         assertEquals(expectedName, scheduledTask.getName());
     }
 
     @Test
-    void setName() {
+    void setNameTest() {
         String expectedName = "new toggle task";
 
         scheduledTask.setName(expectedName);

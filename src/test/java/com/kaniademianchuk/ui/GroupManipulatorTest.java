@@ -2,7 +2,10 @@ package com.kaniademianchuk.ui;
 
 import com.kaniademianchuk.api.IDimmable;
 import com.kaniademianchuk.api.ITogglable;
-import com.kaniademianchuk.model.*;
+import com.kaniademianchuk.model.DefaultDimmable;
+import com.kaniademianchuk.model.DefaultTogglable;
+import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.model.TogglableGroup;
 import com.kaniademianchuk.util.MockEventHandler;
 import com.kaniademianchuk.util.MockUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GroupManipulatorTest {
@@ -37,7 +38,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void addDevice() {
+    void addDeviceTest() {
         ITogglable newDevice = new DefaultDimmable("new smart bulb", IDimmable.MAX_DIM_LEVEL, new MockEventHandler());
         deviceManager.addDevice(newDevice);
         int newId = newDevice.getId();
@@ -54,7 +55,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void addAlreadyPresentDevice() {
+    void addAlreadyPresentDeviceTest() {
         int presentId = testDevice0.getId();
         String errorMessage = String.format("Group contains device with id %d already", presentId);
         MockUtil.mockCommands("addDevice " + presentId, "exit");
@@ -70,7 +71,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void addUnexistingDevice() {
+    void addUnexistingDeviceTest() {
         int unexistingId = Integer.MAX_VALUE;
         String errorMessage = String.format("Device with id %d not found", unexistingId);
         MockUtil.mockCommands("addDevice " + unexistingId, "exit");
@@ -86,7 +87,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void removeDevice() {
+    void removeDeviceTest() {
         ITogglable deviceToBeRemoved = new DefaultTogglable("useless smart bulb", false, new MockEventHandler());
         deviceManager.addDevice(deviceToBeRemoved);
         int idToBeRemoved = deviceToBeRemoved.getId();
@@ -104,7 +105,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void removeUnexistingDevice() {
+    void removeUnexistingDeviceTest() {
         int unexistingId = deviceManager.getAllDevices().size() + 1;
         String errorMessage = String.format("Device with id %d not found in group", unexistingId);
         MockUtil.mockCommands("removeDevice " + unexistingId, "exit");
@@ -120,7 +121,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void listDevices() {
+    void listDevicesTest() {
         MockUtil.mockCommands("list", "exit");
         groupManipulator = new GroupManipulator(new Scanner(System.in), groupManager, deviceManager);
 
@@ -133,7 +134,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void toggleToOff() {
+    void toggleToOffTest() {
         MockUtil.mockCommands("toggle", "exit");
         groupManipulator = new GroupManipulator(new Scanner(System.in), groupManager, deviceManager);
 
@@ -143,7 +144,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void toggleToOn() {
+    void toggleToOnTest() {
         MockUtil.mockCommands("toggle", "exit");
         groupManipulator = new GroupManipulator(new Scanner(System.in), groupManager, deviceManager);
         deviceGroup.turnOff();
@@ -154,7 +155,7 @@ class GroupManipulatorTest {
     }
 
     @Test
-    void exitHasNoEffectOnDevices() {
+    void exitHasNoEffectOnDevicesTest() {
         MockUtil.mockCommands("exit");
         groupManipulator = new GroupManipulator(new Scanner(System.in), groupManager, deviceManager);
 

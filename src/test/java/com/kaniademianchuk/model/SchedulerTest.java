@@ -31,7 +31,7 @@ class SchedulerTest {
     }
 
     @Test
-    void scheduleTask() {
+    void scheduleTaskTest() {
         Optional<Integer> interval = Optional.empty();
         boolean stateBeforeSchedulingTask = device0.isOn();
 
@@ -48,7 +48,7 @@ class SchedulerTest {
     }
 
     @Test
-    void scheduleAlreadyScheduledTask() {
+    void scheduleAlreadyScheduledTaskTest() {
         Optional<Integer> interval = Optional.of(DateUtil.DAILY);
         Date currentTimePlusOneSecond = DateUtil.add(new Date(), Calendar.SECOND, 1);
         scheduler.scheduleTask(currentTimePlusOneSecond, interval, scheduledTask);

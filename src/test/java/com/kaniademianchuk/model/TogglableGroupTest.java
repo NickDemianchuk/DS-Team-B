@@ -20,7 +20,7 @@ class TogglableGroupTest {
     }
 
     @Test
-    void turnOn() {
+    void turnOnTest() {
         togglableGroup.turnOn();
 
         for (DefaultTogglable togglable : togglableGroup.getDevices()) {
@@ -29,7 +29,7 @@ class TogglableGroupTest {
     }
 
     @Test
-    void turnOff() {
+    void turnOffTest() {
         togglableGroup.turnOff();
 
         for (DefaultTogglable togglable : togglableGroup.getDevices()) {
@@ -38,7 +38,7 @@ class TogglableGroupTest {
     }
 
     @Test
-    void toggle() {
+    void toggleTest() {
         int index = 0;
         boolean[] expectedStates = {!smartBulb.isOn(), !smartSwitch.isOn()};
 
@@ -48,7 +48,7 @@ class TogglableGroupTest {
     }
 
     @Test
-    void isOn() {
+    void isOnTest() {
         boolean beforeTurningOn = togglableGroup.isOn();
         togglableGroup.turnOn();
         boolean afterTurningOn = togglableGroup.isOn();

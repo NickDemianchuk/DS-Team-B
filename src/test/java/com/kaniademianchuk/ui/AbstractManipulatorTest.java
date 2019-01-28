@@ -18,7 +18,7 @@ class AbstractManipulatorTest {
     private AbstractManipulator manipulator;
 
     @Test
-    void promptString() {
+    void promptStringTest() {
         String prompt = "abstract prompt: ";
         String response = "response";
 
@@ -30,7 +30,7 @@ class AbstractManipulatorTest {
     }
 
     @Test
-    void promptOneFromMany() {
+    void promptOneFromManyTest() {
         String prompt = "abstract prompt (one|two):";
         String choice1 = "one";
         String choice2 = "two";
@@ -44,7 +44,7 @@ class AbstractManipulatorTest {
     }
 
     @Test
-    void matchFirstInteger() {
+    void matchFirstIntegerTest() {
         Optional<Integer> id = Optional.of(new Integer(1));
         String input = "device " + id.get();
         Pattern pattern = PatternUtil.DEVICE_PATTERN;
@@ -56,7 +56,7 @@ class AbstractManipulatorTest {
     }
 
     @Test
-    void isNotInteger() {
+    void isNotIntegerTest() {
         String input = "device one";
         Pattern pattern = PatternUtil.DEVICE_PATTERN;
         this.initializeManipulator();
@@ -67,7 +67,7 @@ class AbstractManipulatorTest {
     }
 
     @Test
-    void doesNotMatchPattern() {
+    void doesNotMatchPatternTest() {
         Optional<Integer> id = Optional.of(new Integer(1));
         String input = "group " + id.get();
         Pattern pattern = PatternUtil.DEVICE_PATTERN;
@@ -80,7 +80,7 @@ class AbstractManipulatorTest {
     }
 
     @Test
-    void getPrefix() {
+    void getPrefixTest() {
         this.initializeManipulator();
 
         assertEquals(AbstractManipulatorTest.PREFIX, manipulator.getPrefix());

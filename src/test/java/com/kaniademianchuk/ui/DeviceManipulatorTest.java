@@ -14,9 +14,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class DeviceManipulatorTest {
@@ -35,7 +35,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void toggleToOff() {
+    void toggleToOffTest() {
         MockUtil.mockCommands("toggle", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
 
@@ -45,7 +45,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void toggleToOn() {
+    void toggleToOnTest() {
         MockUtil.mockCommands("toggle", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
         testDevice0.turnOff();
@@ -56,7 +56,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void turnOnTurnedOff() {
+    void turnOnTurnedOffTest() {
         MockUtil.mockCommands("on", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
         testDevice0.turnOff();
@@ -67,7 +67,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void turnOnTurnedOn() {
+    void turnOnTurnedOnTest() {
         MockUtil.mockCommands("on", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
 
@@ -77,7 +77,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void turnOffTurnedOff() {
+    void turnOffTurnedOffTest() {
         MockUtil.mockCommands("off", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
         testDevice0.turnOff();
@@ -88,7 +88,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void turnOffTurnedOn() {
+    void turnOffTurnedOnTest() {
         MockUtil.mockCommands("off", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
 
@@ -98,7 +98,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void status() {
+    void statusTest() {
         MockUtil.mockCommands("status", "exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
 
@@ -111,7 +111,7 @@ class DeviceManipulatorTest {
     }
 
     @Test
-    void exitHasNoEffectOnDevices(){
+    void exitHasNoEffectOnDevicesTest(){
         MockUtil.mockCommands("exit");
         deviceManipulator = new DeviceManipulator(new Scanner(System.in), deviceManager);
 
