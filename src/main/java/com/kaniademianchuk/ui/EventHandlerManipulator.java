@@ -56,7 +56,7 @@ public class EventHandlerManipulator extends AbstractManipulator {
 
     private void addEventListener() {
         String name = this.promptString("Name for handler: ");
-        String nameRegex = this.promptString("Name regex for subject (eg. PowerSwitch(\\d+): ");
+        String nameRegex = this.promptString("Name regex for subject (eg. PowerSwitch(\\d+)): ");
         String task;
         EventHandlerType listenOnTask = null;
         while (listenOnTask == null) {
