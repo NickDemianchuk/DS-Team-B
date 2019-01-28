@@ -5,6 +5,7 @@ import com.kaniademianchuk.api.ITogglable;
 import com.kaniademianchuk.events.DefaultEventHandler;
 import com.kaniademianchuk.events.EventBroker;
 import com.kaniademianchuk.model.*;
+import com.kaniademianchuk.util.PatternUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MainMenu extends AbstractManipulator {
-    private static final Pattern removeDevicePattern = Pattern.compile("removeDevice (\\d+)");
-    private static final Pattern removeGroupPattern = Pattern.compile("removeGroup (\\d+)");
     private Manager<TogglableGroup<ITogglable>> groupManager = new Manager<>();
     private Manager<ITogglable> deviceManager = new Manager<>();
     private Manager<ScheduledTask> taskManager = new Manager<>();
@@ -40,8 +39,8 @@ public class MainMenu extends AbstractManipulator {
             this.deviceManager.addDevice(device);
             this.format("Added device with id %d\n", device.getId());
         });
-        commands.put("removeDevice (\\d+)", str -> {
-            Optional<Integer> match = matchFirstInteger(removeDevicePattern, str);
+        commands.put(PatternUtil.REMOVE_DEVICE, str -> {
+            Optional<Integer> match = matchFirstInteger(PatternUtil.REMOVE_DEVICE_PATTERN, str);
             if (!match.isPresent()) {
                 return;
             }
@@ -61,8 +60,8 @@ public class MainMenu extends AbstractManipulator {
             this.groupManager.addDevice(newGroup);
             this.format("Added group with id %d\n", newGroup.getId());
         });
-        commands.put("removeGroup (\\d+)", str -> {
-            Optional<Integer> match = matchFirstInteger(removeGroupPattern, str);
+        commands.put(PatternUtil.REMOVE_GROUP, str -> {
+            Optional<Integer> match = matchFirstInteger(PatternUtil.REMOVE_GROUP_PATTERN, str);
             if (!match.isPresent()) {
                 return;
             }

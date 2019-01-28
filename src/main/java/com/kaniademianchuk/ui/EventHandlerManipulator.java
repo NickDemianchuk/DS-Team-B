@@ -116,12 +116,7 @@ public class EventHandlerManipulator extends AbstractManipulator {
     }
 
     private Condition createTaskTypeCondition(EventHandlerType taskType) {
-        return new Condition() {
-            @Override
-            public boolean evaluate(ITogglable subject, EventHandlerType event) {
-                return event == taskType;
-            }
-        };
+        return (subject, event) -> event == taskType;
     }
 
     private DefaultEventHandler.Action createAction(String name, ScheduledTaskType taskType, Integer delay) {
