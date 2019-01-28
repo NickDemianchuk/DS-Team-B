@@ -9,12 +9,12 @@ import com.kaniademianchuk.model.Manager;
 import com.kaniademianchuk.model.ScheduledTask;
 import com.kaniademianchuk.model.ScheduledTaskType;
 import com.kaniademianchuk.model.Scheduler;
+import com.kaniademianchuk.util.DateUtil;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class EventHandlerManipulator extends AbstractManipulator {
-    private static final Integer MINUTE_IN_MILISECONDS = 1000 * 60;
     private final Manager<ScheduledTask> taskManager;
     private final Manager<ITogglable> deviceManager;
     private final EventBroker<DefaultEventHandler> eventBroker;
@@ -134,7 +134,7 @@ public class EventHandlerManipulator extends AbstractManipulator {
             public void execute(ITogglable subject) {
                 Calendar date = Calendar.getInstance();
                 long t = date.getTimeInMillis();
-                Date expectedDate = new Date(t + (delay * MINUTE_IN_MILISECONDS));
+                Date expectedDate = new Date(t + (delay * DateUtil.MINUTE_IN_MILLISECONDS));
                 ScheduledTask scheduledTask = new ScheduledTask(
                         "Task created by eventHandler " + name,
                         this.deviceManager,

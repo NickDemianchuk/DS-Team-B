@@ -52,7 +52,7 @@ public class ScheduledTask extends TimerTask implements IIdentifiable {
 
     @Override
     public void run() {
-        Optional<ITogglable> device = this.source.getDeviceById(id);
+        Optional<ITogglable> device = this.source.getDeviceById(subjectId);
         if (!device.isPresent()) {
             return;
         }
@@ -86,5 +86,9 @@ public class ScheduledTask extends TimerTask implements IIdentifiable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    protected static Integer testGetLatestId() {
+        return ScheduledTask.latestId - 1;
     }
 }
