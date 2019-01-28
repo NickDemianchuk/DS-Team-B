@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class MainMenu extends AbstractManipulator {
     private Manager<TogglableGroup<ITogglable>> groupManager = new Manager<>();
@@ -19,11 +18,12 @@ public class MainMenu extends AbstractManipulator {
     private Manager<ScheduledTask> taskManager = new Manager<>();
     private Map<String, Command> commands = new HashMap<>();
     private EventBroker<DefaultEventHandler> eventBroker = new EventBroker<>();
+    private boolean done = false;
 
     public MainMenu(Scanner reader) {
         super(reader);
 
-        commands.put("exit", str -> System.exit(0));
+        commands.put("exit", str -> MainMenu.this.done = true);
         commands.put("listGroups", str -> this.listManager(groupManager));
         commands.put("listDevices", str -> this.listManager(deviceManager));
         commands.put("device (\\d+)", str -> {
@@ -32,7 +32,7 @@ public class MainMenu extends AbstractManipulator {
         commands.put("group (\\d+)", str -> {
             new GroupManipulator(this.reader, groupManager, deviceManager).run(str);
         });
-        commands.put("help", str->{
+        commands.put("help", str -> {
             this.format("Commands: \ncreateGroup, createDevice, removeGroup, removeDevice\neventHandlers, listGroups, listDevices\ndevice <id>, group <id>, schedule, exit\n");
         });
         commands.put("schedule", str -> new ScheduleManipulator(this.reader, taskManager, deviceManager).run(str));
@@ -124,7 +124,7 @@ public class MainMenu extends AbstractManipulator {
 
     public void run() {
         this.initialize();
-        while (true) {
+        while (!this.done) {
             String n = this.promptString("Choose a command, help for list of commands: ");
             for (Map.Entry<String, Command> entry : commands.entrySet()) {
                 if (n.matches(entry.getKey())) {

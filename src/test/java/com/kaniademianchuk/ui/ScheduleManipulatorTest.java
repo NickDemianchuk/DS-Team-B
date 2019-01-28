@@ -1,7 +1,10 @@
 package com.kaniademianchuk.ui;
 
 import com.kaniademianchuk.api.ITogglable;
-import com.kaniademianchuk.model.*;
+import com.kaniademianchuk.model.DefaultTogglable;
+import com.kaniademianchuk.model.Manager;
+import com.kaniademianchuk.model.ScheduledTask;
+import com.kaniademianchuk.model.ScheduledTaskType;
 import com.kaniademianchuk.util.MockEventHandler;
 import com.kaniademianchuk.util.MockUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScheduleManipulatorTest {
@@ -36,7 +39,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void promptString() {
+    void promptStringTest() {
         String response = "list";
         MockUtil.mockCommands(response);
         this.initializeManipulator();
@@ -47,7 +50,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void promptOneFromMany() {
+    void promptOneFromManyTest() {
         String choice1 = "list";
         String choice2 = "create";
         String choice3 = "remove";
@@ -63,7 +66,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void promptUnexistingOneFromMany() {
+    void promptUnexistingOneFromManyTest() {
         String choice1 = "list";
         String choice2 = "create";
         String choice3 = "remove";
@@ -85,7 +88,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void runToList() {
+    void runToListTest() {
         String input1 = "list";
         String input2 = "exit";
         MockUtil.mockCommands(input1, input2);
@@ -100,7 +103,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void runToCreate() {
+    void runToCreateTest() {
         String input1 = "create";
         String input2 = "new task";
         String input3 = "2019-12-31 23:59:59";
@@ -119,7 +122,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void runToRemove() {
+    void runToRemoveTest() {
         String input1 = "remove";
         String input2 = String.valueOf(scheduledTask.getId());
         String input3 = "exit";
@@ -134,7 +137,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void runToRemoveUnexisting() {
+    void runToRemoveUnexistingTest() {
         String input1 = "remove";
         String input2 = String.valueOf(Integer.MAX_VALUE);
         String input3 = "exit";
@@ -154,7 +157,7 @@ class ScheduleManipulatorTest {
     }
 
     @Test
-    void runToExitWithNoImpact() {
+    void runToExitWithNoImpactTest() {
         String input = "exit";
 
         MockUtil.mockCommands(input);
