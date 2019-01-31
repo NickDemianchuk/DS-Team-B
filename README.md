@@ -1,4 +1,4 @@
-# Homework 1 [![Build Status](https://travis-ci.com/NickDemianchuk/DS-Team-B.svg?branch=master)](https://travis-ci.com/NickDemianchuk/DS-Team-B)
+# Homework 1 [![Build Status](https://travis-ci.com/mDemianchuk/DS-Team-B.svg?branch=master)](https://travis-ci.com/mDemianchuk/DS-Team-B)
 
 By Mykola Demianchuk & Robert Kania 
 
